@@ -1,0 +1,56 @@
+startup_message off
+
+
+#Load the bash profile of the user who starts the screen session
+. ~/.bash_profile
+
+
+# Bind F11 and F12 (NOT F1 and F2) to previous and next screen window
+bindkey -k F1 prev
+bindkey -k F2 next
+
+
+# Window list at the bottom with hostname & date/time
+hardstatus alwayslastline
+
+hardstatus string '%{= kG}[ %{G}%H %{g}][%= %{= kw}%?%-Lw%?%{r}(%{W}%n*%f %t%?(%u)%?%{r})%{w}%?%+Lw%?%?%=%{g}][%{B}%Y-%m-%d %{W}%c %{g}]'
+
+
+# Don't block command output if the terminal stops responding
+# (like if the ssh connection times out for example).
+nonblock on
+
+
+# Allow editors etc. to restore display on exit
+# rather than leaving existing text in place
+altscreen on
+
+
+# terminfo and termcap for nice 256 color terminal
+# allow bold colors - necessary for some reason
+attrcolor b ".I"
+
+
+# tell screen how to set colors. AB = background, AF=foreground
+termcapinfo xterm-256color 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
+
+
+# Default screens
+screen -t PwN.BoX	0
+screen -t Sh3LL		1
+screen -t iRoXoRz	2
+screen -t BiN.B@sH	3
+
+
+# Instructions for sharing a SCREEN session:
+# chmod +s or chmod 4755 the screen binary in /usr/bin "sudo chmod 4755 /usr/bin/screen"
+# create a named session "screen -d -m -S Awesome.Sauce"
+# allow multiple user mode if you want to share the session "CTRL-a :multiuser on"
+# add the desired usernames you wish to share a session with "CTRL-a :acladd username1"
+# have the user connect to your screen session with this command "screen -x yourusername/Awesome.Sauce"
+
+
+# Re-Attach to a dropped screen session
+# List existing sessions "screen -list"
+# now re-attach to the session you dropped from
+# screen -D -r '1234.somescreensession'
