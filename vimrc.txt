@@ -1,4 +1,5 @@
-set pastetoggle=
+" use F2 key to toggle paste mode
+"set pastetoggle=<F2>
 
 " Use Vim settings, rather then Vi settings (much better!).
 " This must be first, because it changes other options as a side effect.
@@ -43,3 +44,15 @@ set history=100
 
 " stop auto matching parentheses, but shift-% still works
 let loaded_matchparen = 1
+
+" auto-paste toggle when pasting
+let &t_SI .= "\<Esc>[?2004h"
+let &t_EI .= "\<Esc>[?2004l"
+
+inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
+
+function! XTermPasteBegin()
+  set pastetoggle=<Esc>[201~
+  set paste
+  return ""
+endfunction
