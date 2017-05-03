@@ -25,7 +25,7 @@ bindkey "^[[19~" select 8
 # Window list at the bottom with hostname & date/time
 hardstatus alwayslastline
 
-hardstatus string '%{= kG}[ %{G}%H %{g}][%= %{= kw}%?%-Lw%?%{r}(%{W}%n*%f %t%?(%u)%?%{r})%{w}%?%+Lw%?%?%=%{g}][%{B}%Y-%m-%d %{W}%c %{g}]'
+hardstatus string '%{= kG}[ %{G}%H %{g}][%= %{= kw}%?%-Lw%?%{r}(%{W}%n*%f %t%?(%u)%?%{r})%{w}%?%+Lw%?%?%=%{g}][%{Y}%Y-%m-%d %{W}%c %{g}]'
 
 
 # Don't block command output if the terminal stops responding
