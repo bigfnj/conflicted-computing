@@ -1,13 +1,25 @@
 startup_message off
+vbell off
 
 
-#Load the bash profile of the user who starts the screen session
-. ~/.bash_profile
+# Use the default shell
+shell -$SHELL
 
 
-# Bind F11 and F12 (NOT F1 and F2) to previous and next screen window
-bindkey -k F1 prev
-bindkey -k F2 next
+# control-left and control-right switch windows
+bindkey "^[[5D" prev
+bindkey "^[[5C" next
+
+
+# f1-8 switch to those windows
+bindkey "^[OP" select 1
+bindkey "^[OQ" select 2
+bindkey "^[OR" select 3
+bindkey "^[OS" select 4
+bindkey "^[[15~" select 5
+bindkey "^[[17~" select 6
+bindkey "^[[18~" select 7
+bindkey "^[[19~" select 8
 
 
 # Window list at the bottom with hostname & date/time
@@ -27,19 +39,66 @@ altscreen on
 
 
 # terminfo and termcap for nice 256 color terminal
+termcapinfo xterm*|rxvt-* 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
+termcapinfo xterm*|rxvt-* 'hs:ts=\E]0;:fs=\007:ds=\E]0;\007'
+termcapinfo xterm*|rxvt-* ti@:te=\E[3J
+termcapinfo xterm*|rxvt-* hs@:cs=\E[%i%d;%dr:im=\E[4h:ei=\E[4l
+termcapinfo xterm*|rxvt-* hs@:cs=\E[%i%p1%d;%p2%dr:im=\E[4h:ei=\E[4l
+
+
+# tell screen how to set colors. AB = background, AF=foreground
+#termcapinfo xterm-256color 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
+termcapinfo xterm-256color 'hs:ts=\E]2;:fs=\007:ds=\E]2;screen\007'
+
+
 # allow bold colors - necessary for some reason
 attrcolor b ".I"
 
 
-# tell screen how to set colors. AB = background, AF=foreground
-termcapinfo xterm-256color 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
+# by default screen uses 8 colors, this enables 256
+term screen-256color
+
+
+#remove some stupid / dangerous key bindings
+bind k
+bind ^k
+bind .
+bind ^\
+bind \\
+bind ^h
+bind h
+
+
+#make them better
+bind 'K' kill
+bind 'I' login on
+bind 'O' login off
+bind '}' history
+
+bind = resize =
+bind + resize +1
+bind - resize -1
+bind _ resize max
+
+
+# Finally! Shift-pg up or down to view scrollback buffer
+bindkey "^[[5~" eval "copy" "stuff ^u"
+bindkey -m "^[[5~" stuff ^u
+bindkey -m "^[[6~" stuff ^d
+
+
+# use the PgUp and PgDn keys to enter copy mode and page through the window backlog:
+#bindkey -k kP copy
 
 
 # Default screens
-screen -t PwN.BoX	0
-screen -t Sh3LL		1
-screen -t iRoXoRz	2
-screen -t BiN.B@sH	3
+screen -t BiN.B@sH        1
+screen -t r00T_Sh3LL      2 sudo -i
+screen -t NeT_W@tcH       3 nice sh -c 'watch -n 30 -t netstat -ane'
+screen -t ToP.Sp1n        4 nice top -c
+#screen -t iLoGzz          5 sudo sh -c 'nice tail -n 60 -s 10 -f ~/.screen/screen_%y-%m-%d_%0c.%n | ccze -A'
+
+select 1
 
 
 # Instructions for sharing a SCREEN session:
@@ -54,3 +113,41 @@ screen -t BiN.B@sH	3
 # List existing sessions "screen -list"
 # now re-attach to the session you dropped from
 # screen -D -r '1234.somescreensession'
+
+
+#
+#------------DEFUNCT/OLD------------
+#
+
+
+# Log the screens
+#chdir $HOME
+#logfile ~/.screen/screen_%y-%m-%d_%0c.%n
+#setenv LC_CTYPE en_US.UTF-8
+#defutf8 on
+#defencoding UTF-8
+
+
+# crlf off
+#multiuser off
+#deflogin off
+
+
+# quietly
+#silencewait 15
+#msgwait 5         # 1 second messages
+#sorendition =s Gk
+#silencewait 5
+
+
+#Load the bash profile of the user who starts the screen session
+#source . ~/.bash_profile
+
+
+# don't kill window after the process died - use esc
+#zombie "^["
+
+
+# Bind F11 and F12 (NOT F1 and F2) to previous and next screen window
+#bindkey -k F1 prev
+#bindkey -k F2 next
