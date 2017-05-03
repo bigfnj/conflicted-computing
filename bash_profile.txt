@@ -114,6 +114,8 @@ On_IWhite='\e[0;107m'   # White
 
 # Alert!
 ALERT=${BWhite}${On_Red} # Bold White on red background
+# Directory
+LS_COLORS='di=1;33' ; export LS_COLORS
 
 
 #---------------------
@@ -150,6 +152,7 @@ fi
 # Alias Redefinitions "Colorize"
 #-------------------------------
 alias ls='ls --color=tty'
+export GREP_OPTIONS='--color=auto'
 
 
 #-------------------------------
@@ -181,7 +184,7 @@ alias libpath='echo -e ${LD_LIBRARY_PATH//:/\\n}'
 # Line1: PWD     (Current path)
 # Line2: successrun/smiley user@hostname $
 #-------------------------------------------
-# If id command returns zero, youve root access!
+# If id command returns zero, you?ve root access!
 if [ $(id -u) -eq 0 ];
 then # you are ROOT!, set ROOT command prompt
   PS1="\n\[\e[0;91m\]\w\[\e[1;91m\]\[\e[m\] \n\$(if [[ \$? == 0 ]]; then echo \"\[\e[1;92m\]:)\"; else echo \"\[\e[1;31m\]:(\"; fi)\[\033[00m\] \[\e[47m\e[1;31m\]\u\[\e[m\]\[\e[4;36m\]@\[\e[0;36m\]\h\[\e[m\] \[\e[1;34m\]\\$\[\e[m\] "
@@ -372,12 +375,13 @@ function ii()   # Get current host related info.
 {
     echo -e "\nYou are logged on ${BRed}$HOSTNAME"
     echo -e "\n${BRed}Additionnal kernel information:$NC " ; uname -a
-    echo -e "\n${BRed}Release  information:$NC " ; cat /etc/oracle-release
+    echo -e "\n${BRed}Release  information:$NC " ; sh ~/.release
+    echo -e "\n${BRed}Java in use by system:$NC " ; java -version
     echo -e "\n${BRed}Users logged on:$NC " ; who | cut -d " " -f1 | sort | uniq
     echo -e "\n${BRed}Current date :$NC " ; date
     echo -e "\n${BRed}Machine stats :$NC " ; uptime
     echo -e "\n${BRed}Memory stats :$NC " ; free -m | grep ^Mem: | awk '{total=$2;used=$3-$6-$7;free=total-used} END {printf("%7'"'"'d MB Total\n%7'"'"'d MB Used\n%7'"'"'d MB Free",total,used,free)}' 
-    echo -e "\n${BRed}Diskspace :$NC " ; mydf `df -x tmpfs -x devtmpfs -hP | grep -v Filesystem | awk '{ print $6 }'` 
+    echo -e "\n\n${BRed}Diskspace :$NC " ; mydf `df -x tmpfs -x devtmpfs -hP | grep -v Filesystem | awk '{ print $6 }'` 
     echo -e "\n${BRed}Local IP Address :$NC" ; my_ip
     echo
 }
