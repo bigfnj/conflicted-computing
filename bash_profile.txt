@@ -146,9 +146,9 @@ export LESS_TERMCAP_us=$'\E[01;32m'
 # If id command returns zero, you?ve root access!
 if [ $(id -u) -eq 0 ];
 then # you are ROOT!, set ROOT command prompt
-  PS1="\n\[\e[0;95m\]\w\[\e[1;95m\]\[\e[m\] \n\$(if [[ \$? == 0 ]]; then echo \"\[\e[1;92m\]:)\"; else echo \"\[\e[1;31m\]:(\"; fi)\[\033[00m\] \[\e[47m\e[1;31m\]\u\[\e[m\]\[\e[4;36m\]@\[\e[0;36m\]\h\[\e[m\] \[\e[1;94m\]\\$\[\e[m\] "
+  PS1="\n\[\e[0;95m\]\w\[\e[1;95m\]\[\e[m\] \n\$(if [[ \$? == 0 ]]; then echo \"\[\e[1;92m\]:)\"; else echo \"\[\e[1;31m\]:(\"; fi)\[\033[00m\] \[\e[47m\e[1;31m\]\u\[\e[m\]\[\e[4;37m\]@\[\e[0;36m\]\h\[\e[m\] \[\e[1;94m\]\\$\[\e[m\] "
 else # you are NOT root, set NORMAL command prompt
-  PS1="\n\[\e[0;95m\]\w\[\e[1;95m\]\[\e[m\] \n\$(if [[ \$? == 0 ]]; then echo \"\[\e[1;92m\]:)\"; else echo \"\[\e[1;31m\]:(\"; fi)\[\033[00m\] \[\e[0;36m\]\u\[\e[4;36m\]@\[\e[0;36m\]\h\[\e[m\] \[\e[1;94m\]\\$\[\e[m\] "
+  PS1="\n\[\e[0;95m\]\w\[\e[1;95m\]\[\e[m\] \n\$(if [[ \$? == 0 ]]; then echo \"\[\e[1;92m\]:)\"; else echo \"\[\e[1;31m\]:(\"; fi)\[\033[00m\] \[\e[0;36m\]\u\[\e[4;37m\]@\[\e[0;36m\]\h\[\e[m\] \[\e[1;94m\]\\$\[\e[m\] "
 fi
 
 
