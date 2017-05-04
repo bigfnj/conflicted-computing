@@ -6,3 +6,29 @@ edit %appdata%\VanDyke\Config\Global.ini, find the line marked B:"ANSI Color RGB
 B:"ANSI Color RGB"=00000040
  07 36 42 00 dc 32 2f 00 85 99 00 00 b5 89 00 00 26 8b d2 00 d3 36 82 00 2a a1 98 00 ee e8 d5 00
  00 2b 38 00 cb 4b 16 00 58 6e 75 00 65 7b 83 00 83 94 96 00 6c 71 c4 00 93 a1 a1 00 fd f6 e3 00
+ 
+ 
+ 
+ FOR PUTTY:
+Default Foreground: 131, 148, 150
+Default Bold Foreground: 147, 161, 161
+Default Background: 0, 43, 54
+Default Bold Background: 7, 54, 66
+Cursor Text: 0, 43, 54
+Cursor Colour: 131, 148, 150
+ANSI Black: 7, 54, 66
+ANSI Black Bold: 0, 43, 54
+ANSI Red: 220, 50, 47
+ANSI Red Bold: 203, 75, 22
+ANSI Green: 133, 153, 0
+ANSI Green Bold: 88, 110, 117
+ANSI Yellow: 181, 137, 0
+ANSI Yellow Bold: 101, 123, 131
+ANSI Blue: 38, 139, 210
+ANSI Blue Bold: 131, 148, 150
+ANSI Magenta: 211, 54, 130
+ANSI Magenta Bold: 108, 113, 196
+ANSI Cyan: 42, 161, 152
+ANSI Cyan Bold: 147, 161, 161
+ANSI White: 238, 232, 213
+ANSI White Bold: 253, 246, 227
