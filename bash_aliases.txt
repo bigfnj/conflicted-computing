@@ -1,0 +1,29 @@
+#-------------------------------
+# Alias Redefinitions "Colorize"
+#-------------------------------
+alias ls='ls --color=tty'
+export GREP_OPTIONS='--color=auto'
+
+
+#-------------------------------
+# Alias Redefinitions "Generic"
+#-------------------------------
+alias ..='cd ..'
+alias c='clear'
+alias la='ls -lhatr --color=tty'
+alias mkdir='mkdir -p'
+alias sudo='sudo '
+alias tf='tail -250f'
+alias egrep='egrep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias grep='grep --color=auto'
+
+#uncomment after installing "vim-enhanced"
+#alias vi='vim'
+
+
+#-------------------------------------------
+# Alias Pretty-print of some PATH variables
+#-------------------------------------------
+alias path='echo -e ${PATH//:/\\n}'
+alias libpath='echo -e ${LD_LIBRARY_PATH//:/\\n}'

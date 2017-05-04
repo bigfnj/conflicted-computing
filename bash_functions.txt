@@ -1,0 +1,218 @@
+#------------------------------------------------------
+# Returns a color according to free disk space in $PWD
+#------------------------------------------------------
+function disk_color()
+{
+    if [ ! -w "${PWD}" ] ; then
+        echo -en ${Red}
+        # No 'write' privilege in the current directory.
+    elif [ -s "${PWD}" ] ; then
+        local used=$(command df -P "$PWD" |
+                   awk 'END {print $5} {sub(/%/,"")}')
+        if [ ${used} -gt 95 ]; then
+            echo -en ${ALERT}           # Disk almost full (>95%).
+        elif [ ${used} -gt 90 ]; then
+            echo -en ${BRed}            # Free disk space almost gone.
+        else
+            echo -en ${Green}           # Free disk space is ok.
+        fi
+    else
+        echo -en ${Cyan}
+        # Current directory is size '0' (like /proc, /sys etc).
+    fi
+}
+
+
+#-----------------------------------------------------
+# Returns a color according to running/suspended jobs
+#-----------------------------------------------------
+function job_color()
+{
+    if [ $(jobs -s | wc -l) -gt "0" ]; then
+        echo -en ${BRed}
+    elif [ $(jobs -r | wc -l) -gt "0" ] ; then
+        echo -en ${BCyan}
+    fi
+}
+
+
+#----------------------------------------------
+# Returns a color according to Connection Type
+#----------------------------------------------
+if [ -n "${SSH_CONNECTION}" ]; then
+    CNX=${Green}        # Connected on remote machine, via ssh (good).
+elif [[ "${DISPLAY%%:0*}" != "" ]]; then
+    CNX=${ALERT}        # Connected on remote machine, not via ssh (bad).
+else
+    CNX=${BCyan}        # Connected on local machine.
+fi
+
+
+#-------------------------------
+# Returns a color for user type
+#-------------------------------
+if [[ ${USER} == "root" ]]; then
+    SU=${Red}           # User is root.
+elif [[ ${USER} != $(logname) ]]; then
+    SU=${BRed}          # User is not login user.
+else
+    SU=${BCyan}         # User is normal (well ... most of us are).
+fi
+
+
+#-------------------------------
+# Get Variables for System Load
+#-------------------------------
+NCPU=$(grep -c 'processor' /proc/cpuinfo)    # Number of CPUs
+SLOAD=$(( 100*${NCPU} ))        # Small load
+MLOAD=$(( 200*${NCPU} ))        # Medium load
+XLOAD=$(( 400*${NCPU} ))        # Xlarge load
+
+
+#-------------------------------------------------------------------
+# Returns system load as percentage, i.e., '40' rather than '0.40)'
+#-------------------------------------------------------------------
+function load()
+{
+    local SYSLOAD=$(cut -d " " -f1 /proc/loadavg | tr -d '.')
+    # System load of the current host.
+    echo $((10#$SYSLOAD))       # Convert to decimal.
+}
+
+
+#----------------------------------------
+# Returns a color indicating system load
+#----------------------------------------
+function load_color()
+{
+    local SYSLOAD=$(load)
+    if [ ${SYSLOAD} -gt ${XLOAD} ]; then
+        echo -en ${ALERT}
+    elif [ ${SYSLOAD} -gt ${MLOAD} ]; then
+        echo -en ${Red}
+    elif [ ${SYSLOAD} -gt ${SLOAD} ]; then
+        echo -en ${BRed}
+    else
+        echo -en ${Green}
+    fi
+}
+
+
+#------------------------------------------------
+# Add some system level functions
+#------------------------------------------------
+# ii        #Get current host related info
+# my_ip     #Get IP adress on eth0
+# my_ps     #Current User Process
+# my_pp     #Current User Process forked Mapping
+#------------------------------------------------
+function my_ps() { ps $@ -u $USER -o pid,%cpu,%mem,bsdtime,command ; }
+function my_pp() { my_ps f | awk '!/awk/ && $0~var' var=${1:-".*"} ; }
+
+
+function mydf()         # Pretty-print of 'df' output.
+{                       # Inspired by 'dfc' utility.
+    for fs ; do
+
+        if [ ! -d $fs ]
+        then
+          echo -e $fs" :No such file or directory" ; continue
+        fi
+
+        local info=( $(command df -P $fs | awk 'END{ print $2,$3,$5 }') )
+        local free=( $(command df -Ph --block-size=M $fs | awk 'END{ print $4 }') )
+        local nbstars=$(( 20 * ${info[1]} / ${info[0]} ))
+        local out="["
+        for ((j=0;j<20;j++)); do
+            if [ ${j} -lt ${nbstars} ]; then
+               out+="*"
+            else
+               out+="-"
+            fi
+        done
+        local used=${info[2]}
+        local pct="$(printf '%4s' $used)"
+        free="$(printf '%9s' $free)"
+        out+="] "$free" free on "$fs
+        pct+="$out"
+        echo "$pct"
+    done
+}
+
+
+function my_ip() # Get IP adress on ethernet.
+{
+    /bin/hostname -I
+}
+
+function ii()   # Get current host related info.
+{
+    echo -e "\nYou are logged on ${BRed}$HOSTNAME"
+    echo -e "\n${BRed}Additionnal kernel information:$NC " ; uname -a
+    echo -e "\n${BRed}Release  information:$NC " ; sh ~/.function_linux_release
+    echo -e "\n${BRed}Java in use by system:$NC " ; java -version
+    echo -e "\n${BRed}Users logged on:$NC " ; who | cut -d " " -f1 | sort | uniq
+    echo -e "\n${BRed}Current date :$NC " ; date
+    echo -e "\n${BRed}Machine stats :$NC " ; uptime
+    echo -e "\n${BRed}Memory stats :$NC " ; free -m | grep ^Mem: | awk '{total=$2;used=$3-$6-$7;free=total-used} END {printf("%7'"'"'d MB Total\n%7'"'"'d MB Used\n%7'"'"'d MB Free",total,used,free)}' 
+    echo -e "\n\n${BRed}Diskspace :$NC " ; mydf `df -x tmpfs -x devtmpfs -hP | grep -v Filesystem | awk '{ print $6 }'` 
+    echo -e "\n${BRed}Local IP Address :$NC" ; my_ip
+    echo
+}
+
+
+#-------------------------------------------------------------------------
+# File & strings related functions:
+#-------------------------------------------------------------------------
+# ff        #Find a file with a pattern in name
+# fe        #Find a file with a pattern $1 in the name & execute $2 on it
+# fstr      #Find a pattern in a set of files & highlight them
+# swap      #Swap 2 filenames around, if they exist
+#-------------------------------------------------------------------------
+# Find a file with a pattern in name:
+function ff() {
+  find . -type f -iname '*'"$*"'*' -ls 2>/dev/null
+}
+
+# Find a file with pattern $1 in name and Execute $2 on it:
+function fe() { find . -type f -iname '*'"${1:-}"'*' \
+-exec ${2:-file} {} \;  ; }
+
+#  Find a pattern in a set of files and highlight them:
+#+ (needs a recent version of egrep).
+function fstr()
+{
+    OPTIND=1
+    local mycase=""
+    local usage="fstr: find string in files.
+Usage: fstr [-i] \"pattern\" [\"filename pattern\"] "
+    while getopts :it opt
+    do
+        case "$opt" in
+           i) mycase="-i " ;;
+           *) echo "$usage"; return ;;
+        esac
+    done
+    shift $(( $OPTIND - 1 ))
+    if [ "$#" -lt 1 ]; then
+        echo "$usage"
+        return;
+    fi
+    find . -type f -name "${2:-*}" -print0 | \
+xargs -0 egrep --color=always -sn ${case} "$1" 2>&- | more
+
+}
+
+
+function swap()
+{ # Swap 2 filenames around, if they exist
+    local TMPFILE=tmp.$$
+
+    [ $# -ne 2 ] && echo "swap: 2 arguments needed" && return 1
+    [ ! -e $1 ] && echo "swap: $1 does not exist" && return 1
+    [ ! -e $2 ] && echo "swap: $2 does not exist" && return 1
+
+    mv "$1" $TMPFILE
+    mv "$2" "$1"
+    mv $TMPFILE "$2"
+}
