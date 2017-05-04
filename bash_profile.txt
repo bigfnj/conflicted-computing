@@ -187,9 +187,9 @@ alias libpath='echo -e ${LD_LIBRARY_PATH//:/\\n}'
 # If id command returns zero, you?ve root access!
 if [ $(id -u) -eq 0 ];
 then # you are ROOT!, set ROOT command prompt
-  PS1="\n\[\e[0;91m\]\w\[\e[1;91m\]\[\e[m\] \n\$(if [[ \$? == 0 ]]; then echo \"\[\e[1;92m\]:)\"; else echo \"\[\e[1;31m\]:(\"; fi)\[\033[00m\] \[\e[47m\e[1;31m\]\u\[\e[m\]\[\e[4;36m\]@\[\e[0;36m\]\h\[\e[m\] \[\e[1;34m\]\\$\[\e[m\] "
+  PS1="\n\[\e[0;95m\]\w\[\e[1;95m\]\[\e[m\] \n\$(if [[ \$? == 0 ]]; then echo \"\[\e[1;92m\]:)\"; else echo \"\[\e[1;31m\]:(\"; fi)\[\033[00m\] \[\e[47m\e[1;31m\]\u\[\e[m\]\[\e[4;36m\]@\[\e[0;36m\]\h\[\e[m\] \[\e[1;94m\]\\$\[\e[m\] "
 else # you are NOT root, set NORMAL command prompt
-  PS1="\n\[\e[0;91m\]\w\[\e[1;91m\]\[\e[m\] \n\$(if [[ \$? == 0 ]]; then echo \"\[\e[1;92m\]:)\"; else echo \"\[\e[1;31m\]:(\"; fi)\[\033[00m\] \[\e[0;36m\]\u\[\e[4;36m\]@\[\e[0;36m\]\h\[\e[m\] \[\e[1;34m\]\\$\[\e[m\] "
+  PS1="\n\[\e[0;95m\]\w\[\e[1;95m\]\[\e[m\] \n\$(if [[ \$? == 0 ]]; then echo \"\[\e[1;92m\]:)\"; else echo \"\[\e[1;31m\]:(\"; fi)\[\033[00m\] \[\e[0;36m\]\u\[\e[4;36m\]@\[\e[0;36m\]\h\[\e[m\] \[\e[1;94m\]\\$\[\e[m\] "
 fi
 
 
@@ -199,7 +199,7 @@ fi
 # Line1: PWD
 # Line2: successrun/smiley user@hostname $
 #--------------------------------------------------------
-export SUDO_PS1="\n\[\e[0;91m\]\w\[\e[1;91m\]\[\e[m\] \n\$(if [[ \$? == 0 ]]; then echo \"\[\e[1;92m\]:)\"; else echo \"\[\e[1;31m\]:(\"; fi)\[\033[00m\] \[\e[0;36m\]\u\[\e[4;36m\]@\[\e[0;36m\]\h\[\e[m\] \[\e[1;34m\]\\$\[\e[m\] "
+export SUDO_PS1="\n\[\e[0;95m\]\w\[\e[1;95m\]\[\e[m\] \n\$(if [[ \$? == 0 ]]; then echo \"\[\e[1;92m\]:)\"; else echo \"\[\e[1;31m\]:(\"; fi)\[\033[00m\] \[\e[0;36m\]\u\[\e[4;36m\]@\[\e[0;36m\]\h\[\e[m\] \[\e[1;94m\]\\$\[\e[m\] "
 
 
 #-----------------------------------------------
@@ -215,6 +215,16 @@ fi
 # SSH like this and fix the profile then relog
 #----------------------------------------------------
 # ssh -t HOSTNAME "bash --noprofile --norc"
+
+
+#------------------------------------------------------------------
+# Enhanced BASH Profile Functions.
+# You may want to put all your funtions into a separate file like
+# ~/.bash_functions, instead of adding them here directly.
+#------------------------------------------------------------------
+if [ -f ~/.bash_functions ]; then
+    . ~/.bash_functions
+fi
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
