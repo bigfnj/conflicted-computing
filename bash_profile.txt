@@ -41,6 +41,7 @@ LS_COLORS='di=1;33' ; export LS_COLORS
 #---------------------
 #History Colorization
 #---------------------
+BCyan='\e[1;36m'        # Bold Cyan
 export HISTIGNORE="&:bg:fg:pwd:ll"
 export HISTTIMEFORMAT="$(echo -e ${BCyan})[%d/%m %H:%M:%S]$(echo -e ${NC}) "
 export HISTCONTROL=ignoreboth
