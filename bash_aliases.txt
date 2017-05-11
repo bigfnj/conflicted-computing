@@ -11,11 +11,11 @@ export GREP_OPTIONS='--color=auto'
 #-------------------------------
 # Alias Redefinitions "Generic"
 #-------------------------------
-alias ..='cd ..'
 alias c='clear'
-alias mkdir='mkdir -p'
+alias ..='cd ..'
 alias sudo='sudo '
 alias tf='tail -250f'
+alias mkdir='mkdir -p'
 alias ll='ls -l --color=auto'
 alias la='ls -lhatr --color=tty'
 alias lah='ls -Adl .* --color=tty'
