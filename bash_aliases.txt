@@ -2,6 +2,9 @@
 # Alias Redefinitions "Colorize"
 #-------------------------------
 alias ls='ls --color=tty'
+alias egrep='egrep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias grep='grep --color=auto'
 export GREP_OPTIONS='--color=auto'
 
 
@@ -10,13 +13,13 @@ export GREP_OPTIONS='--color=auto'
 #-------------------------------
 alias ..='cd ..'
 alias c='clear'
-alias la='ls -lhatr --color=tty'
 alias mkdir='mkdir -p'
 alias sudo='sudo '
 alias tf='tail -250f'
-alias egrep='egrep --color=auto'
-alias fgrep='fgrep --color=auto'
-alias grep='grep --color=auto'
+alias ll='ls -l --color=auto'
+alias la='ls -lhatr --color=tty'
+alias lah='ls -Adl .* --color=tty'
+
 
 #uncomment after installing "vim-enhanced"
 #alias vi='vim'
