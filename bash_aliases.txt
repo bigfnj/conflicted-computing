@@ -16,19 +16,22 @@ alias ..='cd ..'
 alias sudo='sudo '
 alias wget='wget -c'
 alias tf='tail -250f'
-alias mkdir='mkdir -p'
+alias mkdir='mkdir -pv'
+alias df="df -Tha --total"
+alias du="du -ach | sort -h"
 alias ll='ls -l --color=auto'
 alias la='ls -lhatr --color=tty'
 alias lah='ls -Adl .* --color=tty'
 
 
-#--------
-# Useful
-#--------
+#-------------------------------------------------
+# New or added Functionality to existing commands
+#-------------------------------------------------
 alias ports='netstat -tulanp'
 alias meminfo='free -m -l -t'
 alias mount='mount |column -t'
 alias now='date +"%T | %m-%d-%Y"'
+alias psg="ps aux | grep -v grep | grep -i -e VSZ -e"     # Pass an argument IE: psg bash
 
 
 #-------------------------------
@@ -38,28 +41,33 @@ alias psmem='ps auxf | sort -nr -k 4'
 alias psmem10='ps auxf | sort -nr -k 4 | head -10'
 
 
-#---------------------------------------------
-# Shortcut  for iptables and pass it via sudo
-#---------------------------------------------
-alias ipt='sudo /sbin/iptables'
-
-
-#--------------------------
-# IP Tables - Make Friendly
-#--------------------------
-alias iptlist='sudo /sbin/iptables -L -n -v --line-numbers'
-alias iptlistin='sudo /sbin/iptables -L INPUT -n -v --line-numbers'
-alias iptlistout='sudo /sbin/iptables -L OUTPUT -n -v --line-numbers'
-alias iptlistfw='sudo /sbin/iptables -L FORWARD -n -v --line-numbers'
-alias firewall=iptlist
+#-------------------------------------------
+# Alias Pretty-print of some PATH variables
+#-------------------------------------------
+alias path='echo -e ${PATH//:/\\n}'
+alias libpath='echo -e ${LD_LIBRARY_PATH//:/\\n}'
 
 
 #uncomment after installing "vim-enhanced"
 #alias vi='vim'
 
 
-#-------------------------------------------
-# Alias Pretty-print of some PATH variables
-#-------------------------------------------
-alias path='echo -e ${PATH//:/\\n}'
-alias libpath='echo -e ${LD_LIBRARY_PATH//:/\\n}'
+#--------------------------------------
+# SUDO ALIAS SECTION - REQUIRES SUDO! #
+#--------------------------------------
+
+
+#---------------------------------------------
+# Shortcut  for iptables and pass it via sudo
+#---------------------------------------------
+alias ipt='sudo /sbin/iptables'
+
+
+#---------------------------
+# IP Tables - Make Friendly
+#---------------------------
+alias iptlist='sudo /sbin/iptables -L -n -v --line-numbers'
+alias iptlistin='sudo /sbin/iptables -L INPUT -n -v --line-numbers'
+alias iptlistout='sudo /sbin/iptables -L OUTPUT -n -v --line-numbers'
+alias iptlistfw='sudo /sbin/iptables -L FORWARD -n -v --line-numbers'
+alias firewall=iptlist
