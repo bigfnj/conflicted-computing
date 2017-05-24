@@ -30,13 +30,13 @@ alias lk='ls -lSr'                  #Sort by size, biggest last.
 alias lt='ls -ltr'                  #Sort by date, most recent last.
 alias lc='ls -ltcr'                 #Sort by/show change time,most recent last.
 alias lu='ls -ltur'                 #Sort by/show access time,most recent last.
-alias lah='ls -Adl .* --color=tty'  #list only hidden
 #-----------------------------------------------------------------------
 # The ubiquitous 'll': directories first, with alphanumeric sorting:
 #-----------------------------------------------------------------------
 alias ll='ls -lvh --group-directories-first --color=auto'
 alias lm='ll |more'                 #Pipe through 'more'
 alias la='ll -Atr'                  #Show hidden files
+alias lah='ll -Ad .* --color=tty'   #list only hidden
 alias lr='ll -R'                    #Recursive ls
 
 
