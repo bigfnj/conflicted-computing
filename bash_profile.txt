@@ -34,29 +34,14 @@ if [[ $? == 0 ]]; then
 fi
 
 
-# Directory Color more readable, set to Yellow
-LS_COLORS='di=1;33' ; export LS_COLORS
-
-
-#---------------------
-#History Colorization
-#---------------------
-BCyan='\e[1;36m'        # Bold Cyan
-export HISTIGNORE="&:bg:fg:pwd:ll"
-export HISTTIMEFORMAT="$(echo -e ${BCyan})[%d/%m %H:%M:%S]$(echo -e ${NC}) "
-export HISTCONTROL=ignoreboth
-
-
-#-------------------------------------------------------------
-# Tailoring 'less' to make MAN pages more readable with color
-#-------------------------------------------------------------
-export LESS_TERMCAP_mb=$'\E[01;31m'
-export LESS_TERMCAP_md=$'\E[01;31m'
-export LESS_TERMCAP_me=$'\E[0m'
-export LESS_TERMCAP_se=$'\E[0m'
-export LESS_TERMCAP_so=$'\E[01;44;33m'
-export LESS_TERMCAP_ue=$'\E[0m'
-export LESS_TERMCAP_us=$'\E[01;32m'
+#-----------------------------------
+# Many things look better in CoLoR!
+# Lets Call That File
+# ~/.bash_colorlist
+#-----------------------------------
+if [ -f ~/.bash_colorlist ]; then
+    . ~/.bash_colorlist
+fi
 
 
 #------------------------------------------------------------
