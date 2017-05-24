@@ -167,4 +167,10 @@ function ask()          # See 'killps' for example of use.
 
 #---
 #END
-#---
+#-------------------------------------
+# Function to run upon exit of shell.
+function _exit()
+{
+    echo -e "${BWhite}${On_Red}Hasta la vista, baby${NC}"
+}
+trap _exit EXIT
