@@ -2,7 +2,7 @@
 # Add some system level functions
 #------------------------------------------------
 # ii        #Get current host related info
-# my_ip     #Get IP adress on eth0
+# my_ip     #Get IP adress on via hostname -I
 # my_ps     #Current User Process
 # my_pp     #Current User Process forked Mapping
 # mydf      #Pretty print of df output in 'ii'
