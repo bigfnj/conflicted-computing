@@ -50,7 +50,7 @@ function ii()   # Get current host related info.
 {
     echo -e "\nYou are logged on ${BRed}$HOSTNAME"
     echo -e "\n${BRed}Additionnal kernel information:$NC " ; uname -a
-    echo -e "\n${BRed}Release  information:$NC " ; sh ~/.release
+    echo -e "\n${BRed}Release  information:$NC " ; sh ~/.function_linux_release.sh
     echo -e "\n${BRed}Java in use by system:$NC " ; java -version
     echo -e "\n${BRed}Users logged on:$NC " ; who | cut -d " " -f1 | sort | uniq
     echo -e "\n${BRed}Current date :$NC " ; date
