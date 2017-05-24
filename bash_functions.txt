@@ -8,8 +8,11 @@
 # mydf      #Pretty print of df output in 'ii'
 # ii        #Get current host related info
 #------------------------------------------------
+
 function my_ps() { ps $@ -u $USER -o pid,%cpu,%mem,bsdtime,command ; }
+
 function my_pp() { my_ps f | awk '!/awk/ && $0~var' var=${1:-".*"} ; }
+
 function killps()   # kill by process name
 {
     local pid pname sig="-TERM"   # default signal
@@ -136,6 +139,31 @@ function swap()
     mv $TMPFILE "$2"
 }
 
+
+#---------------------------------------------
+# Misc utilities:
+# Repeat    # Repeat n times command
+# Ask       # See 'killps' for example of use
+#---------------------------------------------
+
+function repeat()       # Repeat n times command.
+{
+    local i max
+    max=$1; shift;
+    for ((i=1; i <= max ; i++)); do  # --> C-like syntax
+        eval "$@";
+    done
+}
+
+
+function ask()          # See 'killps' for example of use.
+{
+    echo -n "$@" '[y/n] ' ; read ans
+    case "$ans" in
+        y*|Y*) return 0 ;;
+        *) return 1 ;;
+    esac
+}
 
 #---
 #END
