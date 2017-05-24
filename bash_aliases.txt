@@ -17,7 +17,6 @@ alias sudo='sudo '
 alias wget='wget -c'
 alias tf='tail -250f'
 alias mkdir='mkdir -pv'
-alias df="df -Tha --total"
 alias du="du -ach | sort -h"
 alias ll='ls -l --color=auto'
 alias la='ls -lhatr --color=tty'
