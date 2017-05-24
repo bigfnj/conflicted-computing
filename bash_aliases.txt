@@ -11,16 +11,18 @@ export GREP_OPTIONS='--color=auto'
 #-------------------------------
 # Alias Redefinitions "Generic"
 #-------------------------------
-alias c='clear'
-alias ..='cd ..'
-alias sudo='sudo '
-alias wget='wget -c'
-alias tf='tail -250f'
-alias mkdir='mkdir -pv'
-alias du="du -ach | sort -h"
-alias ll='ls -l --color=auto'
-alias la='ls -lhatr --color=tty'
-alias lah='ls -Adl .* --color=tty'
+alias c='clear'                     #clear the screen easily
+alias ..='cd ..'                    #Go back 1 directory
+alias sudo='sudo '                  #common typo correction
+alias wget='wget -c'                #continue on errors
+alias tf='tail -250f'               #tail and follow buffering up the last 250 lines
+alias mkdir='mkdir -pv'             #create parent directory if required
+alias du='du -ach | sort -h'        #make du more readable & sorted
+alias la='ls -lhatr --color=tty'    #list files including hidden
+alias lah='ls -Adl .* --color=tty'  #list only hidden
+alias ll='ls -lvh --group-directories-first --color=auto'
+alias lm='ll |more'                 #Pipe through 'more'
+alias lr='ll -R'                    #Recursive ls.
 
 
 #-------------------------------------------------
