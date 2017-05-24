@@ -104,24 +104,25 @@ function swap()
 function mydf()
 {
     for fs ; do
-
-        if [ ! -d $fs ]
-        then
-          echo -e $fs" :No such file or directory" ; continue
-        fi
-
+			if [ ! -d $fs ]
+				then
+					echo -e $fs" :No such file or directory" ; continue
+			fi
         local info=( $(command df -P $fs | awk 'END{ print $2,$3,$5 }') )
-        local free=( $(command df -Pkh $fs | awk 'END{ print $4 }') )
+        local free=( $(command df -Ph --block-size=M $fs | awk 'END{ print $4 }') )
         local nbstars=$(( 20 * ${info[1]} / ${info[0]} ))
         local out="["
-        for ((j=0;j<20;j++)); do
-            if [ ${j} -lt ${nbstars} ]; then
-               out=$out"*"
-            else
-               out=$out"-"
-            fi
-        done
-        out="${info[2]} $out] ($free free on $fs)"
-        echo -e "$out"
+			for ((j=0;j<20;j++)); do
+				if [ ${j} -lt ${nbstars} ]; then
+					out+="*"
+				else
+					out+="-"
+				fi
+			done
+        local used=${info[2]}
+        local pct="$(printf '%4s' $used)"
+        free="$(printf '%9s' $free)"
+        out+="] "$free" free on "$fs
+        pct+="$out"
+        echo "$pct"
     done
-}
