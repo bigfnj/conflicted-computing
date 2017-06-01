@@ -1,12 +1,11 @@
-#-------------------------------------------------------------
-# Shell Prompt - for many examples, see:
-#       http://www.debian-administration.org/articles/205
-#       http://www.askapache.com/linux/bash-power-prompt.html
-#       http://tldp.org/HOWTO/Bash-Prompt-HOWTO
-#       https://github.com/nojhan/liquidprompt
-#-------------------------------------------------------------
-# Current Format: [TIME USER@HOST PWD] >
-# TIME:
+#------------------------------------------------------------------
+# Function Related Colorlist.
+# The Functions rely heavily on color-coding, call that file
+# ~/.bash_colorlist
+#------------------------------------------------------------------
+# Current Format: PWD
+#                 LOAD USER@HOST >
+# TIME/LOAD:
 #    Green     == machine load is low
 #    Orange    == machine load is medium
 #    Red       == machine load is high
@@ -53,11 +52,11 @@ else
 fi
 
 
-
 NCPU=$(grep -c 'processor' /proc/cpuinfo)    # Number of CPUs
 SLOAD=$(( 100*${NCPU} ))        # Small load
 MLOAD=$(( 200*${NCPU} ))        # Medium load
 XLOAD=$(( 400*${NCPU} ))        # Xlarge load
+
 
 # Returns system load as percentage, i.e., '40' rather than '0.40)'.
 function load()
@@ -66,6 +65,7 @@ function load()
     # System load of the current host.
     echo $((10#$SYSLOAD))       # Convert to decimal.
 }
+
 
 # Returns a color indicating system load.
 function load_color()
@@ -81,6 +81,7 @@ function load_color()
         echo -en ${Green}
     fi
 }
+
 
 # Returns a color according to free disk space in $PWD.
 function disk_color()
@@ -104,6 +105,7 @@ function disk_color()
     fi
 }
 
+
 # Returns a color according to running/suspended jobs.
 function job_color()
 {
@@ -114,13 +116,27 @@ function job_color()
     fi
 }
 
+
+# Returns a color code depending on exitstatus
+exit_color ()
+{
+  local status="$?"
+  local status_color=""
+  if [ $status != 0 ]; then
+    status_color=${BIRed}${NC}
+  else
+    status_color=${BIGreen}{NC}
+  fi
+}
+
+
 # Returns smiley or sad face depending on exitstatus
-function  exitstatus()
+function exit_status()
 {
     if [[ $? == 0 ]]; then
-        echo -e "\e[1;92m:)"
-      else
-        echo -e "\e[1;31m:("
+        echo -e "\e[1;92m:) \e[m"
+    else
+        echo -e "\e[1;31m:( \e[m"
     fi
 }
 
@@ -129,9 +145,28 @@ function  exitstatus()
 PROMPT_COMMAND="history -a"
         # PWD (with 'disk space' info):
         PS1="\n\[\$(disk_color)\]\w\[${NC}\] "
-        # SMILEY (based on exit status)
-        PS1=${PS1}"\n\$(if [[ $? == 0 ]]; then echo \"\[\e[1;92m\]:)\"; else echo \"\[\e[1;31m\]:(\"; fi) "
+
+        # Symbol with Load Color
+        PS1=${PS1}"\n\[\$(load_color)\]*\[${NC}\] "
+        
         # User@Host (with connection type info):
         PS1=${PS1}"\[${SU}\]\u\[${NC}\]@\[${CNX}\]\h\[${NC}\] "
-        # Prompt > (with 'job' info):
+
+        # Prompt (with 'job' info):
         PS1=${PS1}"\[\$(job_color)\]>\[${NC}\] "
+
+
+#-------------------------------------------------
+# MAY BE SWAPPED AROUND WITH BELOW CONSTRUCTIONS
+#-------------------------------------------------
+#¤
+#±
+#*
+        # Time of day (with load info):
+        #PS1="\[\$(load_color)\][\A\[${NC}\] "     
+  
+        
+        #export PS1='$(exitstatus) > '    #Test the function
+        # Exit Status (Broken & Needs work to re-evaluate exit status after each prompt)
+        #PS1=${PS1}"\[\$(exit_status)\]\[${NC}\] "
+        #PS1=${PS1}"\$(if [[ $? == 0 ]]; then echo \"\[\e[1;92m\]:)\"; else echo \"\[\e[1;31m\]:(\"; fi) \[${NC}\] "
