@@ -153,7 +153,7 @@ export HOSTFILE=$HOME/.hosts    # Put a list of remote hosts in ~/.hosts
 
 
 
-### EXAMPLE ##########
+####### NICE EXAMPLE OF COMMAND_PROMPT THAT INCLUDES EXIT STATUS PROPERLY ##########
 PROMPT_COMMAND=__prompt_command # Func to gen PS1 after CMDs
 
 __prompt_command() {
