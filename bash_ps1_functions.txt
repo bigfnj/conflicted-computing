@@ -136,7 +136,7 @@ function prompt_ps1 ()
         PS1=${PS1}"\[${SU}\]\u\[${NC}\]@\[${CNX}\]\h\[${NC}\] "
 
         # End Prompt (with 'job' info):
-        PS1=${PS1}"\[\$(job_color)\]\$\[${NC}\]"
+        PS1=${PS1}"\[\$(job_color)\]\$\[${NC}\] "
 }
 
 
