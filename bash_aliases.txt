@@ -4,7 +4,6 @@
 alias grep='grep --color=auto'
 alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
-export GREP_OPTIONS='--color=auto'
 
 
 #-------------------------------
@@ -35,6 +34,7 @@ alias lu='ls -ltur'                 #Sort by/show access time,most recent last.
 alias ll='ls -lvh --group-directories-first --color=auto'
 alias lm='ll |more'                 #Pipe through 'more'
 alias la='ll -Atr'                  #Show hidden files
+alias l.='ls -d .* --color=auto'    #list only hidden without directories
 alias lah='ll -Ad .* --color=tty'   #list only hidden
 alias lr='ll -R'                    #Recursive ls
 
