@@ -72,13 +72,6 @@ if [ -f ~/.bash_functions ]; then
 fi
 
 
-#----------------------------------------------------
-# If any error is made and the profile will not load
-# SSH like this and fix the profile then relog
-#----------------------------------------------------
-# ssh -t HOSTNAME "bash --noprofile --norc"
-
-
 #------------------------------------------------------------------
 # Load the bash prompt
 # un-comment the IF statement depending on preference
@@ -93,6 +86,13 @@ fi
 #if [ -f ~/.bash_ps1_standard ]; then
 #    . ~/.bash_ps1_standard
 #fi
+
+
+#----------------------------------------------------
+# If any error is made and the profile will not load
+# SSH like this and fix the profile then relog
+#----------------------------------------------------
+# ssh -t HOSTNAME "bash --noprofile --norc"
 
 
 #---
