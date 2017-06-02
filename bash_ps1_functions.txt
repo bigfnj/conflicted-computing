@@ -1,10 +1,8 @@
-#------------------------------------------------------------------
-# Function Related Colorlist.
-# The Functions rely heavily on color-coding, call that file
-# ~/.bash_colorlist
-#------------------------------------------------------------------
+#------------------------------------
+# Function Reliant BASH Prompt | PS1
+#------------------------------------
 # Current Format: PWD
-#                 LOAD USER@HOST >
+#                 SMILEY USER@HOST $
 # TIME/LOAD:
 #    Green     == machine load is low
 #    Orange    == machine load is medium
@@ -24,14 +22,14 @@
 #    ALERT     == less than 5% free disk space
 #    Red       == current user does not have write privileges
 #    Cyan      == current filesystem is size zero (like /proc)
-# >:
+# $:
 #    White     == no background or suspended jobs in this shell
 #    Cyan      == at least one background job in this shell
 #    Orange    == at least one suspended job in this shell
 #
-#    Command is added to the history file each time you hit enter,
-#    so it's available to all shells (using 'history -a').
-
+# SMILEY:
+#    Green     == last exit code was positive
+#    Red       == last exit code was negative
 
 # Test connection type:
 if [ -n "${SSH_CONNECTION}" ]; then
@@ -117,8 +115,8 @@ function job_color()
 }
 
 
-# Create a function out of prompt command so its re-run everytime its called
-function prompt_command ()
+# Create a function for prompt command so its re-run everytime its called
+function prompt_ps1 ()
 {
     if [ $? -eq 0 ]; then               # set an error string for the prompt, as smilies!
         ERRPROMPT="\e[1;92m:)\e[m"
@@ -126,33 +124,39 @@ function prompt_command ()
         ERRPROMPT="\e[1;31m:(\e[m"
     fi
 
+
 # Now we construct the prompt.
         # PWD (with 'disk space' info):
         PS1="\n\[\$(disk_color)\]\w\[${NC}\] "
 
-        # Exit Command Status Smiley
+        # Exit Command (as a colored smiley)
         PS1=${PS1}"\n$ERRPROMPT\[${NC}\] "
         
         # User@Host (with connection type info):
         PS1=${PS1}"\[${SU}\]\u\[${NC}\]@\[${CNX}\]\h\[${NC}\] "
 
-        # Prompt (with 'job' info):
-        PS1=${PS1}"\[\$(job_color)\]>\[${NC}\] "
+        # End Prompt (with 'job' info):
+        PS1=${PS1}"\[\$(job_color)\]\$\[${NC}\]"
 }
 
 
 # Set PROMPT_COMMAND to a function
-export PROMPT_COMMAND=prompt_command
+export PROMPT_COMMAND=prompt_ps1
 
 
 #-------------------------------------------------
 # MAY BE SWAPPED AROUND WITH BELOW CONSTRUCTIONS
 #-------------------------------------------------
-#¤
-#±
-#*
+
+# \t   The time, in 24-hour HH:MM:SS format. 
+# \T   The time, in 12-hour HH:MM:SS format. 
+# \@   The time, in 12-hour am/pm format.
+ 
         # Time of day (with load info):
-        #PS1="\[\$(load_color)\][\A\[${NC}\] "     
-  
-        # Symbol with Load Color
+        #PS1=${PS1}"\[\$(load_color)\][\t\[${NC}\] "     
+
+# Â¤
+# Â±
+# *  
+        # Symbol or Character (with load info):
         #PS1=${PS1}"\n\[\$(load_color)\]*\[${NC}\] "
