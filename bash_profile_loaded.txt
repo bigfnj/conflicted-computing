@@ -8,9 +8,9 @@ PATH=$PATH:$HOME/bin
 export PATH
 
 
-#-------------------------------
-# Get the aliases and functions
-#-------------------------------
+#--------------------------------------------
+# Get the extended bash profile coniguration
+#--------------------------------------------
 if [ -f ~/.bashrc ]; then
       . ~/.bashrc
 fi
@@ -34,8 +34,13 @@ if [[ $? == 0 ]]; then
 fi
 
 
+#-----------------------------------
+# Many things look better in CoLoR!
+# Lets Call That File
+# ~/.bash_colorlist
+#-----------------------------------
 #-----------------------------------------------------
-# Define Color Definitions for use in prompt, etc.
+# Define Color Definitions for use in functions, etc.
 # Some colors might look different on some terminals
 #-----------------------------------------------------
 # Resets
@@ -112,15 +117,23 @@ On_IPurple='\e[0;105m'  # Purple
 On_ICyan='\e[0;106m'    # Cyan
 On_IWhite='\e[0;107m'   # White
 
+
+#--------
 # Alert!
+#--------
 ALERT=${BWhite}${On_Red} # Bold White on red background
-# Directory
+
+
+#-----------------------------------------------
+# Directory Color More Readable - Set to Yellow
+#-----------------------------------------------
 LS_COLORS='di=1;33' ; export LS_COLORS
 
 
 #---------------------
 #History Colorization
 #---------------------
+BCyan='\e[1;36m'        # Bold Cyan
 export HISTIGNORE="&:bg:fg:pwd:ll"
 export HISTTIMEFORMAT="$(echo -e ${BCyan})[%d/%m %H:%M:%S]$(echo -e ${NC}) "
 export HISTCONTROL=ignoreboth
@@ -138,68 +151,11 @@ export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
 
 
-#------------------------------------------------------------------
-# Alias definitions.
-# You may want to put all your additions into a separate file like
-# ~/.bash_aliases, instead of adding them here directly.
-#------------------------------------------------------------------
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
-fi
-
-
-#-------------------------------
-# Alias Redefinitions "Colorize"
-#-------------------------------
-alias ls='ls --color=tty'
+#--------------------
+# GREP Option Export
+#--------------------
 export GREP_OPTIONS='--color=auto'
 
-
-#-------------------------------
-# Alias Redefinitions "Generic"
-#-------------------------------
-alias ..='cd ..'
-alias c='clear'
-alias la='ls -lhatr --color=tty'
-alias mkdir='mkdir -p'
-alias sudo='sudo '
-alias tf='tail -250f'
-alias egrep='egrep --color=auto'
-alias fgrep='fgrep --color=auto'
-alias grep='grep --color=auto'
-
-#uncomment after installing "vim-enhanced"
-#alias vi='vim'
-
-
-#-------------------------------------------
-# Alias Pretty-print of some PATH variables
-#-------------------------------------------
-alias path='echo -e ${PATH//:/\\n}'
-alias libpath='echo -e ${LD_LIBRARY_PATH//:/\\n}'
-
-
-#-------------------------------------------
-# Command Prompt (Toggled based on ROOT)
-# Line1: PWD     (Current path)
-# Line2: successrun/smiley user@hostname $
-#-------------------------------------------
-# If id command returns zero, you?ve root access!
-if [ $(id -u) -eq 0 ];
-then # you are ROOT!, set ROOT command prompt
-  PS1="\n\[\e[0;95m\]\w\[\e[1;95m\]\[\e[m\] \n\$(if [[ \$? == 0 ]]; then echo \"\[\e[1;92m\]:)\"; else echo \"\[\e[1;31m\]:(\"; fi)\[\033[00m\] \[\e[47m\e[1;31m\]\u\[\e[m\]\[\e[4;36m\]@\[\e[0;36m\]\h\[\e[m\] \[\e[1;94m\]\\$\[\e[m\] "
-else # you are NOT root, set NORMAL command prompt
-  PS1="\n\[\e[0;95m\]\w\[\e[1;95m\]\[\e[m\] \n\$(if [[ \$? == 0 ]]; then echo \"\[\e[1;92m\]:)\"; else echo \"\[\e[1;31m\]:(\"; fi)\[\033[00m\] \[\e[0;36m\]\u\[\e[4;36m\]@\[\e[0;36m\]\h\[\e[m\] \[\e[1;94m\]\\$\[\e[m\] "
-fi
-
-
-#--------------------------------------------------------
-# SUDO User Command Prompt - (NOT toggled based on ROOT)
-# Exports this command prompt to any user you sudo into
-# Line1: PWD
-# Line2: successrun/smiley user@hostname $
-#--------------------------------------------------------
-export SUDO_PS1="\n\[\e[0;95m\]\w\[\e[1;95m\]\[\e[m\] \n\$(if [[ \$? == 0 ]]; then echo \"\[\e[1;92m\]:)\"; else echo \"\[\e[1;31m\]:(\"; fi)\[\033[00m\] \[\e[0;36m\]\u\[\e[4;36m\]@\[\e[0;36m\]\h\[\e[m\] \[\e[1;94m\]\\$\[\e[m\] "
 
 
 #-----------------------------------------------
@@ -210,11 +166,101 @@ if [ "$SUDO_USER" == "user.id" ]; then
 fi
 
 
-#----------------------------------------------------
-# If any error is made and the profile will not load
-# SSH like this and fix the profile then relog
-#----------------------------------------------------
-# ssh -t HOSTNAME "bash --noprofile --norc"
+#------------------------------------------------------------------
+# Alias definitions.
+# You may want to put all your additions into a separate file like
+# ~/.bash_aliases, instead of adding them here directly.
+#------------------------------------------------------------------
+#-------------------------------
+# Alias Redefinitions "Colorize"
+#-------------------------------
+alias grep='grep --color=auto'
+alias egrep='egrep --color=auto'
+alias fgrep='fgrep --color=auto'
+
+
+#-------------------------------
+# Alias Redefinitions "Generic"
+#-------------------------------
+alias c='clear'                     #clear the screen easily
+alias ..='cd ..'                    #Go back 1 directory
+alias sudo='sudo '                  #common typo correction
+alias wget='wget -c'                #continue on errors
+alias tf='tail -250f'               #tail and follow buffering up the last 250 lines
+alias mkdir='mkdir -pv'             #create parent directory if required
+alias du='du -ach | sort -h'        #make du more readable
+
+
+#-----------------------------------------------------------------------
+# The 'ls' family
+# Add colors for filetype and  human-readable sizes by default on 'ls':
+#-----------------------------------------------------------------------
+alias ls='ls -h --color=tty'        #List with color option
+alias lx='ls -lXB'                  #Sort by extension.
+alias lk='ls -lSr'                  #Sort by size, biggest last.
+alias lt='ls -ltr'                  #Sort by date, most recent last.
+alias lc='ls -ltcr'                 #Sort by/show change time,most recent last.
+alias lu='ls -ltur'                 #Sort by/show access time,most recent last.
+#-----------------------------------------------------------------------
+# The ubiquitous 'll': directories first, with alphanumeric sorting:
+#-----------------------------------------------------------------------
+alias ll='ls -lvh --group-directories-first --color=auto'
+alias lm='ll |more'                 #Pipe through 'more'
+alias la='ll -Atr'                  #Show hidden files
+alias l.='ls -d .* --color=auto'    #list only hidden without directories
+alias lah='ll -Ad .* --color=tty'   #list only hidden
+alias lr='ll -R'                    #Recursive ls
+
+
+#-------------------------------------------------
+# New or added Functionality to existing commands
+#-------------------------------------------------
+alias ports='netstat -tulanp'
+alias meminfo='free -m -l -t'
+alias mount='mount |column -t'
+alias now='date +"%T | %m-%d-%Y"'
+alias psg='ps aux | grep -v grep | grep -i -e VSZ -e'     # Pass an argument IE: psg bash
+
+
+#-------------------------------
+# Get top process eating memory
+#-------------------------------
+alias psmem='ps auxf | sort -nr -k 4'
+alias psmem10='ps auxf | sort -nr -k 4 | head -10'
+
+
+#-------------------------------------------
+# Alias Pretty-print of some PATH variables
+#-------------------------------------------
+alias path='echo -e ${PATH//:/\\n}'
+alias libpath='echo -e ${LD_LIBRARY_PATH//:/\\n}'
+
+
+#uncomment after installing "vim-enhanced"
+#alias vi='vim'
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# SUDO ALIAS SECTION - REQUIRES SUDO! #
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+
+#---------------------------------------------
+# Shortcut  for iptables and pass it via sudo
+#---------------------------------------------
+alias ipt='sudo /sbin/iptables'
+
+
+#---------------------------
+# IP Tables - Make Friendly
+#---------------------------
+alias iptlist='sudo /sbin/iptables -L -n -v --line-numbers'
+alias iptlistin='sudo /sbin/iptables -L INPUT -n -v --line-numbers'
+alias iptlistfw='sudo /sbin/iptables -L FORWARD -n -v --line-numbers'
+alias iptlistout='sudo /sbin/iptables -L OUTPUT -n -v --line-numbers'
+alias firewall=iptlist
 
 
 #------------------------------------------------------------------
@@ -222,132 +268,47 @@ fi
 # You may want to put all your funtions into a separate file like
 # ~/.bash_functions, instead of adding them here directly.
 #------------------------------------------------------------------
-if [ -f ~/.bash_functions ]; then
-    . ~/.bash_functions
-fi
-
-
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++~
-# REMOVE EVERYTHING UNDER THIS LINE TO REMOVE FUNCTIONS!!!~
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++~
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-#------------------------------------------------------
-# Returns a color according to free disk space in $PWD
-#------------------------------------------------------
-function disk_color()
-{
-    if [ ! -w "${PWD}" ] ; then
-        echo -en ${Red}
-        # No 'write' privilege in the current directory.
-    elif [ -s "${PWD}" ] ; then
-        local used=$(command df -P "$PWD" |
-                   awk 'END {print $5} {sub(/%/,"")}')
-        if [ ${used} -gt 95 ]; then
-            echo -en ${ALERT}           # Disk almost full (>95%).
-        elif [ ${used} -gt 90 ]; then
-            echo -en ${BRed}            # Free disk space almost gone.
-        else
-            echo -en ${Green}           # Free disk space is ok.
-        fi
-    else
-        echo -en ${Cyan}
-        # Current directory is size '0' (like /proc, /sys etc).
-    fi
-}
-
-
-#-----------------------------------------------------
-# Returns a color according to running/suspended jobs
-#-----------------------------------------------------
-function job_color()
-{
-    if [ $(jobs -s | wc -l) -gt "0" ]; then
-        echo -en ${BRed}
-    elif [ $(jobs -r | wc -l) -gt "0" ] ; then
-        echo -en ${BCyan}
-    fi
-}
-
-
-#----------------------------------------------
-# Returns a color according to Connection Type
-#----------------------------------------------
-if [ -n "${SSH_CONNECTION}" ]; then
-    CNX=${Green}        # Connected on remote machine, via ssh (good).
-elif [[ "${DISPLAY%%:0*}" != "" ]]; then
-    CNX=${ALERT}        # Connected on remote machine, not via ssh (bad).
-else
-    CNX=${BCyan}        # Connected on local machine.
-fi
-
-
-#-------------------------------
-# Returns a color for user type
-#-------------------------------
-if [[ ${USER} == "root" ]]; then
-    SU=${Red}           # User is root.
-elif [[ ${USER} != $(logname) ]]; then
-    SU=${BRed}          # User is not login user.
-else
-    SU=${BCyan}         # User is normal (well ... most of us are).
-fi
-
-
-#-------------------------------
-# Get Variables for System Load
-#-------------------------------
-NCPU=$(grep -c 'processor' /proc/cpuinfo)    # Number of CPUs
-SLOAD=$(( 100*${NCPU} ))        # Small load
-MLOAD=$(( 200*${NCPU} ))        # Medium load
-XLOAD=$(( 400*${NCPU} ))        # Xlarge load
-
-
-#-------------------------------------------------------------------
-# Returns system load as percentage, i.e., '40' rather than '0.40)'
-#-------------------------------------------------------------------
-function load()
-{
-    local SYSLOAD=$(cut -d " " -f1 /proc/loadavg | tr -d '.')
-    # System load of the current host.
-    echo $((10#$SYSLOAD))       # Convert to decimal.
-}
-
-
-#----------------------------------------
-# Returns a color indicating system load
-#----------------------------------------
-function load_color()
-{
-    local SYSLOAD=$(load)
-    if [ ${SYSLOAD} -gt ${XLOAD} ]; then
-        echo -en ${ALERT}
-    elif [ ${SYSLOAD} -gt ${MLOAD} ]; then
-        echo -en ${Red}
-    elif [ ${SYSLOAD} -gt ${SLOAD} ]; then
-        echo -en ${BRed}
-    else
-        echo -en ${Green}
-    fi
-}
-
-
 #------------------------------------------------
 # Add some system level functions
 #------------------------------------------------
-# ii        #Get current host related info
-# my_ip     #Get IP adress on eth0
 # my_ps     #Current User Process
 # my_pp     #Current User Process forked Mapping
+# killps    #Kill Process by Name
+# my_ip     #Get IP adress on via hostname -I
+# mydf      #Pretty print of df output in 'ii'
+# ii        #Get current host related info
 #------------------------------------------------
+
 function my_ps() { ps $@ -u $USER -o pid,%cpu,%mem,bsdtime,command ; }
+
 function my_pp() { my_ps f | awk '!/awk/ && $0~var' var=${1:-".*"} ; }
 
+function killps()   # kill by process name
+{
+    local pid pname sig="-TERM"   # default signal
+    if [ "$#" -lt 1 ] || [ "$#" -gt 2 ]; then
+        echo "Usage: killps [-SIGNAL] pattern"
+        return;
+    fi
+    if [ $# = 2 ]; then sig=$1 ; fi
+    for pid in $(my_ps| awk '!/awk/ && $0~pat { print $1 }' pat=${!#} )
+    do
+        pname=$(my_ps | awk '$1~var { print $5 }' var=$pid )
+        if ask "Kill process $pid <$pname> with signal $sig?"
+            then kill $sig $pid
+        fi
+    done
+}
 
-function mydf()         # Pretty-print of 'df' output.
-{                       # Inspired by 'dfc' utility.
+
+function my_ip() # Get IP adress on ethernet.
+{
+    /bin/hostname -I
+}
+
+
+function mydf()
+{
     for fs ; do
 
         if [ ! -d $fs ]
@@ -376,16 +337,11 @@ function mydf()         # Pretty-print of 'df' output.
 }
 
 
-function my_ip() # Get IP adress on ethernet.
-{
-    /bin/hostname -I
-}
-
 function ii()   # Get current host related info.
 {
     echo -e "\nYou are logged on ${BRed}$HOSTNAME"
     echo -e "\n${BRed}Additionnal kernel information:$NC " ; uname -a
-    echo -e "\n${BRed}Release  information:$NC " ; sh ~/.release
+    echo -e "\n${BRed}Release  information:$NC " ; sh ~/.function_linux_release.sh
     echo -e "\n${BRed}Java in use by system:$NC " ; java -version
     echo -e "\n${BRed}Users logged on:$NC " ; who | cut -d " " -f1 | sort | uniq
     echo -e "\n${BRed}Current date :$NC " ; date
@@ -452,6 +408,243 @@ function swap()
     mv "$2" "$1"
     mv $TMPFILE "$2"
 }
+
+
+#---------------------------------------------
+# Misc utilities:
+# Repeat    # Repeat n times command
+# Ask       # See 'killps' for example of use
+#---------------------------------------------
+
+function repeat()       # Repeat n times command.
+{
+    local i max
+    max=$1; shift;
+    for ((i=1; i <= max ; i++)); do  # --> C-like syntax
+        eval "$@";
+    done
+}
+
+
+function ask()          # See 'killps' for example of use.
+{
+    echo -n "$@" '[y/n] ' ; read ans
+    case "$ans" in
+        y*|Y*) return 0 ;;
+        *) return 1 ;;
+    esac
+}
+
+#---
+#END
+#-------------------------------------
+# Function to run upon exit of shell.
+function _exit()
+{
+    echo -e "${BWhite}${On_Red}Hasta la vista, baby${NC}"
+}
+trap _exit EXIT
+
+
+#------------------------------------------------------------------
+# Load the bash prompt
+# un-comment the IF statement depending on preference
+# .bash_ps1_functions = prompt that relies on system functions
+# .bash_ps1_standard  = prompt that does not rely on any functions
+# or auxilary files (such as .bash_colorlist)
+#------------------------------------------------------------------
+#------------------------------------
+# Function Reliant BASH Prompt | PS1
+#------------------------------------
+# Current Format: PWD
+#                 SMILEY USER@HOST $
+# TIME/LOAD:
+#    Green     == machine load is low
+#    Orange    == machine load is medium
+#    Red       == machine load is high
+#    ALERT     == machine load is very high
+# USER:
+#    Cyan      == normal user
+#    Orange    == SU to user
+#    Red       == root
+# HOST:
+#    Cyan      == local session
+#    Green     == secured remote connection (via ssh)
+#    Red       == unsecured remote connection
+# PWD:
+#    Green     == more than 10% free disk space
+#    Orange    == less than 10% free disk space
+#    ALERT     == less than 5% free disk space
+#    Red       == current user does not have write privileges
+#    Cyan      == current filesystem is size zero (like /proc)
+# $:
+#    White     == no background or suspended jobs in this shell
+#    Cyan      == at least one background job in this shell
+#    Orange    == at least one suspended job in this shell
+#
+# SMILEY:
+#    Green     == last exit code was positive
+#    Red       == last exit code was negative
+
+# Test connection type:
+if [ -n "${SSH_CONNECTION}" ]; then
+    CNX=${Green}        # Connected on remote machine, via ssh (good).
+elif [[ "${DISPLAY%%:0*}" != "" ]]; then
+    CNX=${ALERT}        # Connected on remote machine, not via ssh (bad).
+else
+    CNX=${BCyan}        # Connected on local machine.
+fi
+
+# Test user type:
+if [[ ${USER} == "root" ]]; then
+    SU=${Red}           # User is root.
+elif [[ ${USER} != $(logname) ]]; then
+    SU=${BRed}          # User is not login user.
+else
+    SU=${BCyan}         # User is normal (well ... most of us are).
+fi
+
+
+NCPU=$(grep -c 'processor' /proc/cpuinfo)    # Number of CPUs
+SLOAD=$(( 100*${NCPU} ))        # Small load
+MLOAD=$(( 200*${NCPU} ))        # Medium load
+XLOAD=$(( 400*${NCPU} ))        # Xlarge load
+
+
+# Returns system load as percentage, i.e., '40' rather than '0.40)'.
+function load()
+{
+    local SYSLOAD=$(cut -d " " -f1 /proc/loadavg | tr -d '.')
+    # System load of the current host.
+    echo $((10#$SYSLOAD))       # Convert to decimal.
+}
+
+
+# Returns a color indicating system load.
+function load_color()
+{
+    local SYSLOAD=$(load)
+    if [ ${SYSLOAD} -gt ${XLOAD} ]; then
+        echo -en ${ALERT}
+    elif [ ${SYSLOAD} -gt ${MLOAD} ]; then
+        echo -en ${Red}
+    elif [ ${SYSLOAD} -gt ${SLOAD} ]; then
+        echo -en ${BRed}
+    else
+        echo -en ${Green}
+    fi
+}
+
+
+# Returns a color according to free disk space in $PWD.
+function disk_color()
+{
+    if [ ! -w "${PWD}" ] ; then
+        echo -en ${Red}
+        # No 'write' privilege in the current directory.
+    elif [ -s "${PWD}" ] ; then
+        local used=$(command df -P "$PWD" |
+                   awk 'END {print $5} {sub(/%/,"")}')
+        if [ ${used} -gt 95 ]; then
+            echo -en ${ALERT}           # Disk almost full (>95%).
+        elif [ ${used} -gt 90 ]; then
+            echo -en ${BRed}            # Free disk space almost gone.
+        else
+            echo -en ${Green}           # Free disk space is ok.
+        fi
+    else
+        echo -en ${Cyan}
+        # Current directory is size '0' (like /proc, /sys etc).
+    fi
+}
+
+
+# Returns a color according to running/suspended jobs.
+function job_color()
+{
+    if [ $(jobs -s | wc -l) -gt "0" ]; then
+        echo -en ${BRed}
+    elif [ $(jobs -r | wc -l) -gt "0" ] ; then
+        echo -en ${BCyan}
+    fi
+}
+
+
+# Create a function for prompt command so its re-run everytime its called
+function prompt_ps1 ()
+{
+    if [ $? -eq 0 ]; then               # set an error string for the prompt, as smilies!
+        ERRPROMPT="\e[1;92m:)\e[m"
+    else
+        ERRPROMPT="\e[1;31m:(\e[m"
+    fi
+
+
+# Now we construct the prompt.
+        # PWD (with 'disk space' info):
+        PS1="\n\[\$(disk_color)\]\w\[${NC}\] "
+
+        # Exit Command (as a colored smiley)
+        PS1=${PS1}"\n$ERRPROMPT\[${NC}\] "
+        
+        # User@Host (with connection type info):
+        PS1=${PS1}"\[${SU}\]\u\[${NC}\]@\[${CNX}\]\h\[${NC}\] "
+
+        # End Prompt (with 'job' info):
+        PS1=${PS1}"\[\$(job_color)\]\$\[${NC}\]"
+}
+
+
+# Set PROMPT_COMMAND to a function
+export PROMPT_COMMAND=prompt_ps1
+
+
+#-------------------------------------------------
+# MAY BE SWAPPED AROUND WITH BELOW CONSTRUCTIONS
+#-------------------------------------------------
+
+# \t   The time, in 24-hour HH:MM:SS format. 
+# \T   The time, in 12-hour HH:MM:SS format. 
+# \@   The time, in 12-hour am/pm format.
+ 
+        # Time of day (with load info):
+        #PS1=${PS1}"\[\$(load_color)\][\t\[${NC}\] "     
+
+# ¤
+# ±
+# *  
+        # Symbol or Character (with load info):
+        #PS1=${PS1}"\n\[\$(load_color)\]*\[${NC}\] "
+
+
+#-------------------------------------------
+# Command Prompt (Toggled based on ROOT)
+# Line1: PWD     (Current path)
+# Line2: successrun/smiley user@hostname $
+#-------------------------------------------
+# If id command returns zero, you?ve root access!
+#if [ $(id -u) -eq 0 ];
+#then # you are ROOT!, set ROOT command prompt
+#  PS1="\n\[\e[0;95m\]\w\[\e[1;95m\]\[\e[m\] \n\$(if [[ \$? == 0 ]]; then echo \"\[\e[1;92m\]:)\"; else echo \"\[\e[1;31m\]:(\"; fi)\[\033[00m\] \[\e[47m\e[1;31m\]\u\[\e[m\]\[\e[4;36m\]@\[\e[0;36m\]\h\[\e[m\] \[\e[1;94m\]\\$\[\e[m\] "
+#else # you are NOT root, set NORMAL command prompt
+#  PS1="\n\[\e[0;95m\]\w\[\e[1;95m\]\[\e[m\] \n\$(if [[ \$? == 0 ]]; then echo \"\[\e[1;92m\]:)\"; else echo \"\[\e[1;31m\]:(\"; fi)\[\033[00m\] \[\e[0;36m\]\u\[\e[4;36m\]@\[\e[0;36m\]\h\[\e[m\] \[\e[1;94m\]\\$\[\e[m\] "
+#fi
+
+
+#--------------------------------------------------------
+# SUDO User Command Prompt - (NOT toggled based on ROOT)
+# Exports this command prompt to any user you sudo into
+# Line1: PWD
+# Line2: successrun/smiley user@hostname $
+#--------------------------------------------------------
+#export SUDO_PS1="\n\[\e[0;95m\]\w\[\e[1;95m\]\[\e[m\] \n\$(if [[ \$? == 0 ]]; then echo \"\[\e[1;92m\]:)\"; else echo \"\[\e[1;31m\]:(\"; fi)\[\033[00m\] \[\e[0;36m\]\u\[\e[4;36m\]@\[\e[0;36m\]\h\[\e[m\] \[\e[1;94m\]\\$\[\e[m\] "
+
+
+#----------------------------------------------------
+# If any error is made and the profile will not load
+# SSH like this and fix the profile then relog
+#----------------------------------------------------
+# ssh -t HOSTNAME "bash --noprofile --norc"
 
 
 #---
