@@ -22,7 +22,7 @@ alias du='du -ach | sort -h'        #make du more readable
 # The 'ls' family
 # Add colors for filetype and  human-readable sizes by default on 'ls':
 #-----------------------------------------------------------------------
-alias ls='ls -h --color=tty'
+alias ls='ls -h --color=tty'        #List with color option
 alias lx='ls -lXB'                  #Sort by extension.
 alias lk='ls -lSr'                  #Sort by size, biggest last.
 alias lt='ls -ltr'                  #Sort by date, most recent last.
@@ -46,7 +46,7 @@ alias ports='netstat -tulanp'
 alias meminfo='free -m -l -t'
 alias mount='mount |column -t'
 alias now='date +"%T | %m-%d-%Y"'
-alias psg="ps aux | grep -v grep | grep -i -e VSZ -e"     # Pass an argument IE: psg bash
+alias psg='ps aux | grep -v grep | grep -i -e VSZ -e'     # Pass an argument IE: psg bash
 
 
 #-------------------------------
@@ -85,6 +85,6 @@ alias ipt='sudo /sbin/iptables'
 #---------------------------
 alias iptlist='sudo /sbin/iptables -L -n -v --line-numbers'
 alias iptlistin='sudo /sbin/iptables -L INPUT -n -v --line-numbers'
-alias iptlistout='sudo /sbin/iptables -L OUTPUT -n -v --line-numbers'
 alias iptlistfw='sudo /sbin/iptables -L FORWARD -n -v --line-numbers'
+alias iptlistout='sudo /sbin/iptables -L OUTPUT -n -v --line-numbers'
 alias firewall=iptlist
