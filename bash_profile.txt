@@ -44,31 +44,6 @@ if [ -f ~/.bash_colorlist ]; then
 fi
 
 
-#------------------------------------------------------------
-# Command Prompt (Toggled based on ROOT)
-# Line0: Newline Delimiter
-# Line1: PWD     (Current path)
-# Line2: successrun feedback in smily form | user@hostname $
-#------------------------------------------------------------
-# If id command returns zero, you have root access!
-if [ $(id -u) -eq 0 ];
-then 	# you are ROOT!, set ROOT command prompt
-  PS1="\n\[\e[0;95m\]\w\[\e[1;95m\]\[\e[m\] \n\$(if [[ \$? == 0 ]]; then echo \"\[\e[1;92m\]:)\"; else echo \"\[\e[1;31m\]:(\"; fi)\[\033[00m\] \[\e[47m\e[1;31m\]\u\[\e[m\]\[\e[4;37m\]@\[\e[0;36m\]\h\[\e[m\] \[\e[1;94m\]\\$\[\e[m\] "
-else 	# you are NOT root, set NORMAL command prompt
-  PS1="\n\[\e[0;95m\]\w\[\e[1;95m\]\[\e[m\] \n\$(if [[ \$? == 0 ]]; then echo \"\[\e[1;92m\]:)\"; else echo \"\[\e[1;31m\]:(\"; fi)\[\033[00m\] \[\e[0;36m\]\u\[\e[4;37m\]@\[\e[0;36m\]\h\[\e[m\] \[\e[1;94m\]\\$\[\e[m\] "
-fi
-
-
-#--------------------------------------------------------
-# SUDO User Command Prompt - (NOT toggled based on ROOT)
-# Exports this command prompt to any user you sudo into
-# Line0: Newline
-# Line1: PWD
-# Line2: successrun/smiley user@hostname $
-#--------------------------------------------------------
-export SUDO_PS1="\n\[\e[0;95m\]\w\[\e[1;95m\]\[\e[m\] \n\$(if [[ \$? == 0 ]]; then echo \"\[\e[1;92m\]:)\"; else echo \"\[\e[1;31m\]:(\"; fi)\[\033[00m\] \[\e[0;36m\]\u\[\e[4;36m\]@\[\e[0;36m\]\h\[\e[m\] \[\e[1;94m\]\\$\[\e[m\] "
-
-
 #-----------------------------------------------
 #If user = USERID Then source this profile also
 #-----------------------------------------------
@@ -102,6 +77,22 @@ fi
 # SSH like this and fix the profile then relog
 #----------------------------------------------------
 # ssh -t HOSTNAME "bash --noprofile --norc"
+
+
+#------------------------------------------------------------------
+# Load the bash prompt
+# un-comment the IF statement depending on preference
+# .bash_ps1_functions = prompt that relies on system functions
+# .bash_ps1_standard  = prompt that does not rely on any functions
+# or auxilary files (such as .bash_colorlist)
+#------------------------------------------------------------------
+if [ -f ~/.bash_ps1_functions ]; then
+    . ~/.bash_ps1_functions
+fi
+#------------------------------------------------------------------
+#if [ -f ~/.bash_ps1_standard ]; then
+#    . ~/.bash_ps1_standard
+#fi
 
 
 #---
