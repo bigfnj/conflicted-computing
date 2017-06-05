@@ -140,11 +140,12 @@ function swap()
 }
 
 
-#---------------------------------------------
+#------------------------------------------------------------
 # Misc utilities:
 # Repeat    # Repeat n times command
 # Ask       # See 'killps' for example of use
-#---------------------------------------------
+# List EXE  # List all executable files in current directory
+#------------------------------------------------------------
 
 function repeat()       # Repeat n times command.
 {
@@ -164,6 +165,13 @@ function ask()          # See 'killps' for example of use.
         *) return 1 ;;
     esac
 }
+
+
+function le()           # List all executable files in current directory
+{
+for i in `ls -l | awk '{ if ( $1 ~ /x/ ) {print $NF}}'`; do echo `pwd`/$i; done
+}
+
 
 #---
 #END
