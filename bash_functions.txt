@@ -144,7 +144,7 @@ function swap()
 # Misc utilities:
 # Repeat    # Repeat n times command
 # Ask       # See 'killps' for example of use
-# List EXE  # List all executable files in current directory
+# List EXE  # List all files or directories with the +x flag
 #------------------------------------------------------------
 
 function repeat()       # Repeat n times command.
@@ -167,7 +167,7 @@ function ask()          # See 'killps' for example of use.
 }
 
 
-function le()           # List all executable files in current directory
+function le()           # List all files or directories with the +x flag
 {
 for i in `ls -l | awk '{ if ( $1 ~ /x/ ) {print $NF}}'`; do echo `pwd`/$i; done
 }
