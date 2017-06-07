@@ -11,7 +11,7 @@
 # USER:
 #    Cyan      == normal user
 #    Orange    == SU to user
-#    Red       == root
+#    Red/White == root
 # HOST:
 #    Cyan      == local session
 #    Green     == secured remote connection (via ssh)
@@ -42,11 +42,11 @@ fi
 
 # Test user type:
 if [[ ${USER} == "root" ]]; then
-    SU=${Red}           # User is root.
+    SU=${BIRed}${On_White}  # User is root.
 elif [[ ${USER} != $(logname) ]]; then
-    SU=${BRed}          # User is not login user.
+    SU=${BRed}              # User is not login user.
 else
-    SU=${BCyan}         # User is normal (well ... most of us are).
+    SU=${BCyan}             # User is normal (well ... most of us are).
 fi
 
 
