@@ -11,7 +11,9 @@ PS1="\\n\\\[\\e\[0;95m\\\]\\w\\\[\\e\[1;95m\\\]\\\[\\e\[m\\\] \\n\\$(if \[\[ \\$
 Which is actually the following but color coded:
 
 *PWD*
+
 *EXITSTATUS USER@HOST $*
+
 
 And FINALLY today, into a function that can be read and manipulated by any human. The challenges were getting the prompt to be dynamic and more informative without introducing complexity. A second challenge is figuring out how to run an else/if statement that would execute properly as a function within the PS1 variable… looooong story!
 
