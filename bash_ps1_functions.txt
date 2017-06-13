@@ -122,6 +122,28 @@ function memory_use ()
   }
 
 
+# Function that allows generate_pwd as a function in prompt to truncate if it gets to long; YMMV
+function shorter_pwd
+ {
+  pwd | sed s.$HOME.~.g | awk -F"/" '
+  BEGIN { ORS="/" }
+  END {
+  for (i=1; i<= NF; i++) {
+      if ((i == 1 && $1 != "") || i == NF-1 || i == NF) {
+        print $i
+      }   
+      else if (i == 1 && $1 == "") {
+        print "/"$2
+        i++ 
+      }   
+      else {
+        print ".."
+      }   
+    }   
+  }'  
+}
+
+
 # Create a function for prompt command so its re-run everytime its called
 function prompt_ps1 ()
 {
@@ -183,3 +205,7 @@ export PROMPT_COMMAND=prompt_ps1
 # *
 # ⌘
 # ☿
+
+
+        # Shorter PWD (with 'disk space' info):
+        #PS1="\n\[\$(disk_color)\]\$(shorter_pwd)\[${NC}\] "
