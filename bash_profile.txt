@@ -16,6 +16,13 @@ if [ -f ~/.bashrc ]; then
 fi
 
 
+#---------------------------------------------------
+# Everyone likes consistency: Set UTF-8 as a locale
+# Set your terminal character encoding to UTF-8
+#---------------------------------------------------
+export LANG=$LANG.UTF-8
+
+
 #--------------------------
 # ASCII ART PRINT on login
 #--------------------------
