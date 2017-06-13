@@ -1,0 +1,87 @@
+# NEWER BASH SUPPORTS DIRTRIM
+export PROMPT_DIRTRIM=3
+
+
+
+function generate_pwd {
+  pwd | sed s.$HOME.~.g | awk -F"/" '
+  BEGIN { ORS="/" }
+  END {
+  for (i=1; i<= NF; i++) {
+      if ((i == 1 && $1 != "") || i == NF-1 || i == NF) {
+        print $i
+      }
+      else if (i == 1 && $1 == "") {
+        print "/"$2
+        i++
+      }
+      else {
+        print ".."
+      }
+    }
+  }'
+}
+
+#### WHAT THE ABOVE DOES
+Example of it in use:
+
+~/ -> cd Documents/
+~/Documents/ -> cd scripts/
+~/Documents/scripts/ -> cd test1/
+~/../scripts/test1/ -> cd test2
+~/../../test1/test2/ -> pwd
+/Users/Brandon/Documents/scripts/test1/test2
+~/../../test1/test2/ -> cd test3/
+~/../../../test2/test3/ -> cd test4/
+~/../../../../test3/test4/ -> pwd
+/Users/Brandon/Documents/scripts/test1/test2/test3/test4
+~/../../../../test3/test4/ -> cd /usr/
+/usr/ -> cd local/
+/usr/local/ -> cd etc/
+/usr/local/etc/ -> cd openssl/
+/usr/../etc/openssl/ -> cd private/
+/usr/../../openssl/private/ ->
+
+
+
+
+################################
+another example - may be faster
+
+
+
+
+# set this to whatever you want:
+MAX_PWD_LENGTH=20
+
+function shorten_pwd
+{
+    # This function ensures that the PWD string does not exceed $MAX_PWD_LENGTH characters
+    PWD=$(pwd)
+
+    # if truncated, replace truncated part with this string:
+    REPLACE="/.."
+
+    # determine part of path within HOME, or entire path if not in HOME
+    RESIDUAL=${PWD#$HOME}
+
+    # compare RESIDUAL with PWD to determine whether we are in HOME or not
+    if [ X"$RESIDUAL" != X"$PWD" ]
+    then
+        PREFIX="~"
+    fi
+
+    # check if residual path needs truncating to keep total length below MAX_PWD_LENGTH
+    # compensate for replacement string.
+    TRUNC_LENGTH=$(($MAX_PWD_LENGTH - ${#PREFIX} - ${#REPLACE} - 1))
+    NORMAL=${PREFIX}${RESIDUAL}
+    if [ ${#NORMAL} -ge $(($MAX_PWD_LENGTH)) ]
+    then
+        newPWD=${PREFIX}${REPLACE}${RESIDUAL:((${#RESIDUAL} - $TRUNC_LENGTH)):$TRUNC_LENGTH}
+    else
+        newPWD=${PREFIX}${RESIDUAL}
+    fi
+
+    # return to caller
+    echo $newPWD
+}
