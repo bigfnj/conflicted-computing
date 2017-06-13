@@ -200,11 +200,7 @@ export PROMPT_COMMAND=prompt_ps1
 
         # Symbol or Character (with load info):
         #PS1=${PS1}"\n\[\$(load_color)\]*\[${NC}\] "
-# ¤
-# ±
-# *
-# ⌘
-# ☿
+# ¤ λ ± * ⌘ ☿ ♆ ♅ ♁ ☼ ☸ ☮ ☯ ☭ ☪ ☩ ☧ ☢ ☣ ☠ ☊ ☋ ☉ ☄ ★ ☆ ☍ ☨ ♄ ⚕ ☤ ⚪ ⚫ ⚳ ⚴ ⚵ ⚶ ⛯
 
 
         # Shorter PWD (with 'disk space' info):
