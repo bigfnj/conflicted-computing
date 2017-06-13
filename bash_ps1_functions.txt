@@ -1,7 +1,7 @@
 #------------------------------------
 # Function Reliant BASH Prompt | PS1
 #------------------------------------
-# Current Format: LOAD PWD
+# Current Format: NEWLINE PWD
 #                 SMILEY USER@HOST $
 # LOAD:
 #    Green     == machine load is low
