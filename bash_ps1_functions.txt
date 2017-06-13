@@ -122,7 +122,7 @@ function memory_use ()
   }
 
 
-# Function that allows generate_pwd as a function in prompt to truncate if it gets to long; YMMV
+# Function that shortens the pwd printout in prompt to truncate if it gets to long; YMMV
 function shorter_pwd
  {
   pwd | sed s.$HOME.~.g | awk -F"/" '
