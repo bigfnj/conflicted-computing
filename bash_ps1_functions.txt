@@ -131,13 +131,10 @@ function prompt_ps1 ()
         ERRPROMPT="\e[1;31m:(\e[m"
     fi
 
-
 # Now we construct the prompt.
-        # Memory in use by system (with system load color info):
-        PS1="\n\[\$(load_color)\]$(memory_use)\[${NC}\] "
 
         # PWD (with 'disk space' info):
-        PS1=${PS1}"\[\$(disk_color)\]\w\[${NC}\] "
+        PS1="\n\[\$(disk_color)\]\w\[${NC}\] "
 
         # Exit Command (as a colored smiley)
         PS1=${PS1}"\n$ERRPROMPT\[${NC}\] "
@@ -154,21 +151,35 @@ function prompt_ps1 ()
 export PROMPT_COMMAND=prompt_ps1
 
 
-#-------------------------------------------------
+#-------------------------------------------------------------
 # MAY BE SWAPPED AROUND WITH BELOW CONSTRUCTIONS
-#-------------------------------------------------
+#-------------------------------------------------------------
+# * NOTE the difference between the following:
+# PS1=
+# PS1=${PS1}
+# The ${PS1} is ONLY required after the initial prompt entry
+# When putting something FIRST, simply use PS1=
+# The following prompt contstructs require ${PS1} to tell the
+# system that this follows the PS1=
+# The prompt loads in ORDER so keep that in mind
+#-------------------------------------------------------------
 
-# \t   The time, in 24-hour HH:MM:SS format. 
-# \T   The time, in 12-hour HH:MM:SS format. 
-# \@   The time, in 12-hour am/pm format.
+
+        # Memory in use by system (with system load color info):
+        #PS1="\n\[\$(load_color)\]$(memory_use)\[${NC}\] "
+
  
         # Time of day (with load info):
         #PS1=${PS1}"\[\$(load_color)\][\t\[${NC}\] "     
+# \t   The time, in 24-hour HH:MM:SS format. 
+# \T   The time, in 12-hour HH:MM:SS format. 
+# \@   The time, in 12-hour am/pm format.
 
+
+        # Symbol or Character (with load info):
+        #PS1=${PS1}"\n\[\$(load_color)\]*\[${NC}\] "
 # ¤
 # ±
 # *
 # ⌘
 # ☿
-        # Symbol or Character (with load info):
-        #PS1=${PS1}"\n\[\$(load_color)\]*\[${NC}\] "
