@@ -123,6 +123,8 @@ function memory_use ()
 
 
 # Function that shortens the pwd printout in prompt to truncate if it gets to long; YMMV
+# Returns base home directory, then truncates with ".." and shows final 2 directories
+# IE: ~/../../../workspace/testing_stuff
 function shorter_pwd
  {
   pwd | sed s.$HOME.~.g | awk -F"/" '
