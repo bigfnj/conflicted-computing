@@ -49,7 +49,8 @@ The .bash\_profile currently loads the following in this order:
 
 2.  .ascii
 
-    1.  A print of asci art. There is a kickass sample in the GIT that I enjoy
+    1.  A print of asci art. There is a kickass sample in the GIT that I 
+    Paste the contents from ascii.txt into ~/.ascii
 
 3.  Fortune
 
@@ -58,6 +59,7 @@ The .bash\_profile currently loads the following in this order:
 4.  .bash\_colorlist
 
     1.  Loads a color decode table into linux so that all future “asks” for colorization can be done in a simpler human readable format
+    Paste the contents from bash\_colorlist into ~/.bash\_colorlist
 
 5.  Userid\_load
 
@@ -68,10 +70,12 @@ The .bash\_profile currently loads the following in this order:
 6.  .bash\_aliases
 
     1.  A separate file of system aliases is easier to manage and maintain than including them directly into your profile.
+        Paste the contents from bash_aliases.txt into ~/.bash\_aliases
 
 7.  .bash\_functions
 
     1.  A separate file of user defined “functions”. Let’s just keep things tidy and modular, not all systems can handle functions either, so it’s simple to comment all of the functions out at once.
+        Paste the contents from .bash\_functions.txt into ~/.bash\_functions
 
 8.  .bash\_ps1\_functions
 
