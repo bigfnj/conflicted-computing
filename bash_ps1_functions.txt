@@ -150,9 +150,9 @@ function shorter_pwd ()
 function prompt_ps1 ()
 {
     if [ $? -eq 0 ]; then               # set an error string for the prompt, as smilies!
-        ERRPROMPT="\e[1;92m:)\e[m"
+        ERRPROMPT="\[\e[1;92m\]:)\[\e[m\]"
     else
-        ERRPROMPT="\e[1;31m:(\e[m"
+        ERRPROMPT="\[\e[1;31m\]:(\[\e[m\]"
     fi
 
 # Now we construct the prompt.
