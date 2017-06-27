@@ -68,7 +68,7 @@ alias libpath='echo -e ${LD_LIBRARY_PATH//:/\\n}'
 
 
 #uncomment after moving ccat to /usr/bin and chmod +x on it
-#alieas cat='ccat'
+#alias cat='ccat'
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
