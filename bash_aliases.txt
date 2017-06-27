@@ -67,6 +67,10 @@ alias libpath='echo -e ${LD_LIBRARY_PATH//:/\\n}'
 #alias vi='vim'
 
 
+#uncomment after moving ccat to /usr/bin and chmod +x on it
+#alieas cat='ccat'
+
+
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 # SUDO ALIAS SECTION - REQUIRES SUDO! #
