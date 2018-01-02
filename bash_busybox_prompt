@@ -1,0 +1,4 @@
+
+export PS1='\n\W\n\u@\h \w $ '
+#cd() { command cd "$@" && PS1="$USER@$HOSTNAME:$PWD\$ "; }
+#cd . # Set the prompt the first time.
