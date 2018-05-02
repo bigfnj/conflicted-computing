@@ -26,8 +26,8 @@ export LANG=$LANG.UTF-8
 #--------------------------
 # ASCII ART PRINT on login
 #--------------------------
-if [ -f ~/.ascii ]; then
-    cat ~/.ascii
+if [ -f ~/.ps1/.ascii ]; then
+    cat ~/.ps1/.ascii
 fi
 
 
@@ -46,8 +46,8 @@ fi
 # Lets Call That File
 # ~/.bash_colorlist
 #-----------------------------------
-if [ -f ~/.bash_colorlist ]; then
-    . ~/.bash_colorlist
+if [ -f ~/.ps1/.bash_colorlist ]; then
+    . ~/.ps1/.bash_colorlist
 fi
 
 
@@ -64,8 +64,8 @@ fi
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
 #------------------------------------------------------------------
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
+if [ -f ~/.ps1/.bash_aliases ]; then
+    . ~/.ps1/.bash_aliases
 fi
 
 
@@ -74,8 +74,8 @@ fi
 # You may want to put all your funtions into a separate file like
 # ~/.bash_functions, instead of adding them here directly.
 #------------------------------------------------------------------
-if [ -f ~/.bash_functions ]; then
-    . ~/.bash_functions
+if [ -f ~/.ps1/.bash_functions ]; then
+    . ~/.ps1/.bash_functions
 fi
 
 
@@ -86,12 +86,12 @@ fi
 # .bash_ps1_standard  = prompt that does not rely on any functions
 # or auxilary files (such as .bash_colorlist)
 #------------------------------------------------------------------
-if [ -f ~/.bash_ps1_functions ]; then
-    . ~/.bash_ps1_functions
+if [ -f ~/.ps1/.bash_ps1_functions ]; then
+    . ~/.ps1/.bash_ps1_functions
 fi
 #------------------------------------------------------------------
-#if [ -f ~/.bash_ps1_standard ]; then
-#    . ~/.bash_ps1_standard
+#if [ -f ~/.ps1/.bash_ps1_standard ]; then
+#    . ~/.ps1/.bash_ps1_standard
 #fi
 
 
