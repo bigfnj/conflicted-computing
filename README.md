@@ -29,7 +29,7 @@ Now on to what I have collected here.
 
 The core of the project load here is the bash\_profile.txt
 
--   Create a file in your home directory called .bash\_profile
+-   Create a file in your home directory called .ps1/.bash\_profile
 
 -   Remember to :set paste
 
@@ -50,7 +50,7 @@ The .bash\_profile currently loads the following in this order:
 2.  .ascii
 
     1.  A print of asci art. There is a kickass sample in the GIT that I 
-    2.  Paste the contents from ascii.txt into ~/.ascii
+    2.  Paste the contents from ascii.txt into ~/.ps1/.ascii
 
 3.  Fortune
 
@@ -59,7 +59,7 @@ The .bash\_profile currently loads the following in this order:
 4.  .bash\_colorlist
 
     1.  Loads a color decode table into linux so that all future “asks” for colorization can be done in a simpler human readable format
-    2.  Paste the contents from bash\_colorlist into ~/.bash\_colorlist
+    2.  Paste the contents from bash\_colorlist into ~/.ps1/.bash\_colorlist
 
 5.  Userid\_load
 
@@ -70,26 +70,24 @@ The .bash\_profile currently loads the following in this order:
 6.  .bash\_aliases
 
     1.  A separate file of system aliases is easier to manage and maintain than including them directly into your profile.
-    2.  Paste the contents from bash_aliases.txt into ~/.bash\_aliases
+    2.  Paste the contents from bash_aliases.txt into ~/.ps1/.bash\_aliases
 
 7.  .bash\_functions
 
     1.  A separate file of user defined “functions”. Let’s just keep things tidy and modular, not all systems can handle functions either, so it’s simple to comment all of the functions out at once.
-    2.  Paste the contents from .bash\_functions.txt into ~/.bash\_functions
+    2.  Paste the contents from .ps1/.bash\_functions.txt into ~/.ps1/.bash\_functions
 
-8.  .bash\_ps1\_functions
-
-9.  .bash\_ps1\_standard
+8.  .bash\_ps1\_functions & .bash\_ps1\_standard
 
     1.  Here at the tail end is what initially started this pet project. The all informative, all-inclusive bash prompt.
 
-        1.  Functions
+        A.  Functions
 
-            1.  A prompt that relies completely on functions and is enhanced so that different parts of the prompt are color coded depending on what is happening on the system (well get to that later).
+            a.  A prompt that relies completely on functions and is enhanced so that different parts of the prompt are color coded depending on what is happening on the system (well get to that later).
 
-        2.  Standard
+        B.  Standard
 
-            1.  A prompt that relies on nothing; no colorlist, no functions, etc. This prompt is dynamic to the extent that the exit code smiley changes and the color coding changes if you are root or not root. It’s simple, its straight forward, and has worked properly on every system I have put it on.
+            b.  A prompt that relies on nothing; no colorlist, no functions, etc. This prompt is dynamic to the extent that the exit code smiley changes and the color coding changes if you are root or not root. It’s simple, its straight forward, and has worked properly on every system I have put it on.
 
 Obviously getting complex can lead to strange, bizarre or inexplicable behavior. Remember you can always SSH into your machine with the following command and it will ignore all bash profile loads so you can correct your errors and try again:
 
