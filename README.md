@@ -1,6 +1,6 @@
 # Conflicted-Computing
 
-<img src="http://www.soulpirates.net/wp-content/uploads/2015/04/spy_banner.png" width="624" height="250" />
+<img src="https://github.com/bigfnj/conflicted-computing/blob/master/spy_vs_spy_banner.jpeg" width="624" height="250" />
 
 This project started as a place to store my user bash\_profile so I would always have an accessible way retrieve and leverage my customizations from any location or server that I would grace with my logon presence.
 
