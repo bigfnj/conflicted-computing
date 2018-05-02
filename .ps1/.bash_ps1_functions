@@ -1,137 +1,212 @@
-Skip to content
-This repository
-Search
-Pull requests
-Issues
-Marketplace
-Explore
- @bigfnj
-Sign out
-1
-0 0 bigfnj/conflicted-computing
- Code  Issues 0  Pull requests 0  Projects 0  Wiki  Insights  Settings
-conflicted-computing/ 
-bash_ps1_functions.txt
-  or cancel
-    
- 
-1
 #------------------------------------
-2
 # Function Reliant BASH Prompt | PS1
-3
 #------------------------------------
-4
 # Current Format: NEWLINE PWD
-5
 #                 SMILEY USER@HOST $
-6
 # LOAD:
-7
 #    Green     == machine load is low
-8
 #    Orange    == machine load is medium
-9
 #    Red       == machine load is high
-10
 #    ALERT     == machine load is very high
-11
 # USER:
-12
 #    Cyan      == normal user
-13
 #    Orange    == SU to user
-14
 #    Red/White == root
-15
 # HOST:
-16
 #    Cyan      == local session
-17
 #    Green     == secured remote connection (via ssh)
-18
 #    Red       == unsecured remote connection
-19
 # PWD:
-20
 #    Green     == more than 10% free disk space
-21
 #    Orange    == less than 10% free disk space
-22
 #    ALERT     == less than 5% free disk space
-23
 #    Red       == current user does not have write privileges
-24
 #    Cyan      == current filesystem is size zero (like /proc)
-25
 # $:
-26
 #    White     == no background or suspended jobs in this shell
-27
 #    Cyan      == at least one background job in this shell
-28
 #    Orange    == at least one suspended job in this shell
-29
 #
-30
 # SMILEY:
-31
 #    Green     == last exit code was positive
-32
 #    Red       == last exit code was negative
-33
-​
-34
+
 # Test connection type:
-35
 if [ -n "${SSH_CONNECTION}" ]; then
-36
     CNX=${Green}        # Connected on remote machine, via ssh (good).
-37
 elif [[ "${DISPLAY%%:0*}" != "" ]]; then
-38
     CNX=${ALERT}        # Connected on remote machine, not via ssh (bad).
-39
 else
-40
     CNX=${BCyan}        # Connected on local machine.
-41
 fi
-42
-​
-43
+
 # Test user type:
-44
 if [[ ${USER} == "root" ]]; then
-45
     SU=${BIRed}${On_White}  # User is root.
-46
 elif [[ ${USER} != $(logname) ]]; then
-47
     SU=${BRed}              # User is not login user.
-48
 else
-49
     SU=${BCyan}             # User is normal (well ... most of us are).
-@bigfnj
-Commit changes
+fi
 
-Update bash_ps1_functions.txt
 
-Add an optional extended description…
-  Commit directly to the master branch.
-  Create a new branch for this commit and start a pull request. Learn more about pull requests.
+NCPU=$(grep -c 'processor' /proc/cpuinfo)    # Number of CPUs
+SLOAD=$(( 100*${NCPU} ))        # Small load
+MLOAD=$(( 200*${NCPU} ))        # Medium load
+XLOAD=$(( 400*${NCPU} ))        # Xlarge load
+
+
+# Returns system load as percentage, i.e., '40' rather than '0.40)'.
+function load()
+{
+    local SYSLOAD=$(cut -d " " -f1 /proc/loadavg | tr -d '.')
+    # System load of the current host.
+    echo $((10#$SYSLOAD))       # Convert to decimal.
+}
+
+
+# Returns a color indicating system load.
+function load_color()
+{
+    local SYSLOAD=$(load)
+    if [ ${SYSLOAD} -gt ${XLOAD} ]; then
+        echo -en ${ALERT}
+    elif [ ${SYSLOAD} -gt ${MLOAD} ]; then
+        echo -en ${Red}
+    elif [ ${SYSLOAD} -gt ${SLOAD} ]; then
+        echo -en ${BRed}
+    else
+        echo -en ${Green}
+    fi
+}
+
+
+# Returns a color according to free disk space in $PWD.
+function disk_color()
+{
+    if [ ! -w "${PWD}" ] ; then
+        echo -en ${Red}
+        # No 'write' privilege in the current directory.
+    elif [ -s "${PWD}" ] ; then
+        local used=$(command df -P "$PWD" |
+                   awk 'END {print $5} {sub(/%/,"")}')
+        if [ ${used} -gt 95 ]; then
+            echo -en ${ALERT}           # Disk almost full (>95%).
+        elif [ ${used} -gt 90 ]; then
+            echo -en ${BRed}            # Free disk space almost gone.
+        else
+            echo -en ${Green}           # Free disk space is ok.
+        fi
+    else
+        echo -en ${Cyan}
+        # Current directory is size '0' (like /proc, /sys etc).
+    fi
+}
+
+
+# Returns a color according to running/suspended jobs.
+function job_color()
+{
+    if [ $(jobs -s | wc -l) -gt "0" ]; then
+        echo -en ${BRed}
+    elif [ $(jobs -r | wc -l) -gt "0" ] ; then
+        echo -en ${BCyan}
+    fi
+}
+
+
+# Returns free vs total f:t memory in use by system
+function memory_use ()
+  {   
+        local M=$( free -olm|sed "/Mem/!d; s/Mem:[^0-9]*\([0-9]*\)[^0-9]*\([0-9]*\)[^0-9]*\([0-9]*\).*/\2M\:\3M/";); echo "$M"
+  }
+
+
+# Function that shortens the pwd printout in prompt to truncate if it gets to long; YMMV
+# Returns base home directory, then truncates with ".." and shows final 2 directories
+# IE: ~/../../../workspace/testing_stuff
+function shorter_pwd ()
+ {
+  pwd | sed s.$HOME.~.g | awk -F"/" '
+  BEGIN { ORS="/" }
+  END {
+  for (i=1; i<= NF; i++) {
+      if ((i == 1 && $1 != "") || i == NF-1 || i == NF) {
+        print $i
+      }   
+      else if (i == 1 && $1 == "") {
+        print "/"$2
+        i++ 
+      }   
+      else {
+        print ".."
+      }   
+    }   
+  }'  
+}
+
+
+# Create a function for prompt command so its re-run everytime its called
+function prompt_ps1 ()
+{
+    if [ $? -eq 0 ]; then               # set an error string for the prompt, as smilies!
+        ERRPROMPT="\[\e[1;92m\]:)\[\e[m\]"
+    else
+        ERRPROMPT="\[\e[1;31m\]:(\[\e[m\]"
+    fi
+
+# Now we construct the prompt.
+
+        # PWD (with 'disk space' info):
+        PS1="\n\[\$(disk_color)\]\w\[${NC}\] "
+
+        # Exit Command (as a colored smiley)
+        PS1=${PS1}"\n$ERRPROMPT\[${NC}\] "
+
+        # User@Host (with connection type info):
+        PS1=${PS1}"\[${SU}\]\u\[${NC}\]@\[${CNX}\]\h\[${NC}\] "
+
+        # End Prompt (with 'job' info):
+        PS1=${PS1}"\[\$(job_color)\]\\$\[${NC}\] "
+}
+
+
+# Set PROMPT_COMMAND to a function
+export PROMPT_COMMAND=prompt_ps1
+
+
+#-------------------------------------------------------------
+# MAY BE SWAPPED AROUND WITH BELOW CONSTRUCTIONS
+#-------------------------------------------------------------
+# * NOTE the difference between the following:
+# PS1=
+# PS1=${PS1}
+# The ${PS1} is ONLY required after the initial prompt entry
+# When putting something FIRST, simply use PS1=
+# The following prompt contstructs require ${PS1} to tell the
+# system that this follows the PS1=
+# The prompt loads in ORDER so keep that in mind
+#-------------------------------------------------------------
+
+
+        # Memory in use by system (with system load color info):
+        #PS1="\n\[\$(load_color)\]$(memory_use)\[${NC}\] "
+
  
-© 2018 GitHub, Inc.
-Terms
-Privacy
-Security
-Status
-Help
-Contact GitHub
-API
-Training
-Shop
-Blog
-About
-Press h to open a hovercard with more details.
+        # Time of day (with load info):
+        #PS1=${PS1}"\[\$(load_color)\][\t\[${NC}\] "     
+# \t   The time, in 24-hour HH:MM:SS format. 
+# \T   The time, in 12-hour HH:MM:SS format. 
+# \@   The time, in 12-hour am/pm format.
+
+
+        # Symbol or Character (with load info):
+        #PS1=${PS1}"\n\[\$(load_color)\]*\[${NC}\] "
+# The symbols show up best when terminal is set to UTF-8
+# Reference Site for hundreds more: https://www.w3schools.com/charsets/ref_utf_geometric.asp
+# ¤ λ ± * ⌘ ☿ ♆ ♅ ♁ ☼ ☸ ☮ ☯ ☭ ☪ ☩ ☧ ☢ ☣ ☠ ☊ ☋ ☉ ☄ ☍ ☨ ♄ ⚕ ☤ ⚪ ⚫ ⚳ ⚴ ⚵
+# ϕ ϗ Ϟ ϡ Ϫ ϰ ϴ Ж Ѫ Ѻ Ѿ Ҩ Ұ ∞ ≅ ≎ ⊙ ⋇ ▓ ▒ ░ ▲ ◆ ◴ ◼ ◉ ◈ ▣ ★ ☆ ☬ ⚶ ⛯ Φ Ω ξ
+
+
+        # Shorter PWD (with 'disk space' info):
+        #PS1="\n\[\$(disk_color)\]\$(shorter_pwd)\[${NC}\] "
