@@ -1,0 +1,137 @@
+Skip to content
+This repository
+Search
+Pull requests
+Issues
+Marketplace
+Explore
+ @bigfnj
+Sign out
+1
+0 0 bigfnj/conflicted-computing
+ Code  Issues 0  Pull requests 0  Projects 0  Wiki  Insights  Settings
+conflicted-computing/ 
+bash_ps1_functions.txt
+  or cancel
+    
+ 
+1
+#------------------------------------
+2
+# Function Reliant BASH Prompt | PS1
+3
+#------------------------------------
+4
+# Current Format: NEWLINE PWD
+5
+#                 SMILEY USER@HOST $
+6
+# LOAD:
+7
+#    Green     == machine load is low
+8
+#    Orange    == machine load is medium
+9
+#    Red       == machine load is high
+10
+#    ALERT     == machine load is very high
+11
+# USER:
+12
+#    Cyan      == normal user
+13
+#    Orange    == SU to user
+14
+#    Red/White == root
+15
+# HOST:
+16
+#    Cyan      == local session
+17
+#    Green     == secured remote connection (via ssh)
+18
+#    Red       == unsecured remote connection
+19
+# PWD:
+20
+#    Green     == more than 10% free disk space
+21
+#    Orange    == less than 10% free disk space
+22
+#    ALERT     == less than 5% free disk space
+23
+#    Red       == current user does not have write privileges
+24
+#    Cyan      == current filesystem is size zero (like /proc)
+25
+# $:
+26
+#    White     == no background or suspended jobs in this shell
+27
+#    Cyan      == at least one background job in this shell
+28
+#    Orange    == at least one suspended job in this shell
+29
+#
+30
+# SMILEY:
+31
+#    Green     == last exit code was positive
+32
+#    Red       == last exit code was negative
+33
+​
+34
+# Test connection type:
+35
+if [ -n "${SSH_CONNECTION}" ]; then
+36
+    CNX=${Green}        # Connected on remote machine, via ssh (good).
+37
+elif [[ "${DISPLAY%%:0*}" != "" ]]; then
+38
+    CNX=${ALERT}        # Connected on remote machine, not via ssh (bad).
+39
+else
+40
+    CNX=${BCyan}        # Connected on local machine.
+41
+fi
+42
+​
+43
+# Test user type:
+44
+if [[ ${USER} == "root" ]]; then
+45
+    SU=${BIRed}${On_White}  # User is root.
+46
+elif [[ ${USER} != $(logname) ]]; then
+47
+    SU=${BRed}              # User is not login user.
+48
+else
+49
+    SU=${BCyan}             # User is normal (well ... most of us are).
+@bigfnj
+Commit changes
+
+Update bash_ps1_functions.txt
+
+Add an optional extended description…
+  Commit directly to the master branch.
+  Create a new branch for this commit and start a pull request. Learn more about pull requests.
+ 
+© 2018 GitHub, Inc.
+Terms
+Privacy
+Security
+Status
+Help
+Contact GitHub
+API
+Training
+Shop
+Blog
+About
+Press h to open a hovercard with more details.
