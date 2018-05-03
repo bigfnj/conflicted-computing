@@ -107,3 +107,71 @@ The prompt start with a smiley (I know right!) it smiles green if your last run 
 Now a space, your currently logged in username... the @ symbol and the hostname of the machine. Finally the prompt ender which is a $ when you are NOT root, and a # when you ARE root.
 
 --Now for colors
+In the pwd for current directory on the system
+ PWD:
+    Green     == more than 10% free disk space
+    Orange    == less than 10% free disk space
+    ALERT     == less than 5% free disk space
+    Red       == current user does not have write privileges
+    Cyan      == current filesystem is size zero (like /proc)
+    
+For the Smiley we have:
+ SMILEY:
+    Green     == last exit code was positive
+    Red       == last exit code was negative
+    
+For username:
+ USER:
+    Cyan      == normal user
+    Orange    == SU to user
+    Red/White == root
+    
+The @ symbol I decided not to color, as it got a little confusing and no longer worked as a clean break in the prompt seperating the user from the host
+
+For host:
+ HOST:
+    Cyan      == local session
+    Green     == secured remote connection (via ssh)
+    Red       == unsecured remote connection
+    
+And finally our prompt ender $:
+ $:
+    White     == no background or suspended jobs in this shell
+    Cyan      == at least one background job in this shell
+    Orange    == at least one suspended job in this shell
+
+=========================================
+The next portion of the prompt file is the set of functions that are used to return a color based on the scripted logic. You can assign these colors/functions to any part of the prompt you like, but this seemed to make the most sense to me.
+
+Towards the end you see the actual prompt construction script, and it finally ends with turning the prompt itself into a system function. Turning it into a system function is necessary in order to have the prompt re-run all of the functions to determine if anything has changed IE: if you move into a restricted directory, the PWD will turn red notifying you that you do not have write permission in that directory, the only way to trigger this check is to turn the prompt into a function that is run everytime the prompt is generated in the terminal.
+
+
+# Now we construct the prompt.
+
+        # PWD (with 'disk space' info):
+        PS1="\n\[\$(disk_color)\]\w\[${NC}\] "
+
+        # Exit Command (as a colored smiley)
+        PS1=${PS1}"\n$ERRPROMPT\[${NC}\] "
+
+        # User@Host (with connection type info):
+        PS1=${PS1}"\[${SU}\]\u\[${NC}\]@\[${CNX}\]\h\[${NC}\] "
+
+        # End Prompt (with 'job' info):
+        PS1=${PS1}"\[\$(job_color)\]\\$\[${NC}\] "
+}
+
+
+# Set PROMPT_COMMAND to a function
+export PROMPT_COMMAND=prompt_ps1
+
+
+==============================================
+
+There are a few samples of other constructed prompts in there but this should get you started!
+
+## TO DO:
+1. Put picture examples of prompt in the readme
+2. Explain other files in the GIT
+3. Document & explain SecureCRT configuration
+4. The prompt doesnt always refresh out properly after say, cat on an executable file, reading up I believe the prompt doesnt know its current position in relation to the terminal window. There are a LOT of different suggestions on correcting this, but I have not found one to be consistent across multiple terminal interfaces (PUTTY, SECURECRT, Etc.)
