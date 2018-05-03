@@ -98,10 +98,8 @@ Open the prompt file: .bash_ps1_functions
 __
 In order moving down, we see the initial makeup of the prompt itself as:
 
-
-NEWLINE PWD
-SMILEY USER@HOST $
-
+### NEWLINE PWD
+### SMILEY USER@HOST $
 
 Newline is simply that, we create a "new line" after the text on the screen to avoid clutter and confusion. We follow that with a pwd command to show our current location in the file system. Here we actually insert another newline so that when we are deep in the file system, it doesnt interupt the prompt, it also keeps the prompt position consistent which is nice.
 
@@ -149,7 +147,7 @@ The next portion of the prompt file is the set of functions that are used to ret
 Towards the end you see the actual prompt construction script, and it finally ends with turning the prompt itself into a system function. Turning it into a system function is necessary in order to have the prompt re-run all of the functions to determine if anything has changed IE: if you move into a restricted directory, the PWD will turn red notifying you that you do not have write permission in that directory, the only way to trigger this check is to turn the prompt into a function that is run everytime the prompt is generated in the terminal.
 
 
-#_Now we construct the prompt._
+### Now we construct the prompt.
 
         # PWD (with 'disk space' info):
         PS1="\n\[\$(disk_color)\]\w\[${NC}\] "
@@ -165,7 +163,7 @@ Towards the end you see the actual prompt construction script, and it finally en
 }
 
 
-_Set PROMPT_COMMAND to a function_
+### Set PROMPT_COMMAND to a function
 export PROMPT_COMMAND=prompt_ps1
 
 
