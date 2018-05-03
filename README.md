@@ -148,7 +148,7 @@ Towards the end you see the actual prompt construction script, and it finally en
 
 
 ### Now we construct the prompt.
-
+```
         # PWD (with 'disk space' info):
         PS1="\n\[\$(disk_color)\]\w\[${NC}\] "
 
@@ -160,12 +160,13 @@ Towards the end you see the actual prompt construction script, and it finally en
 
         # End Prompt (with 'job' info):
         PS1=${PS1}"\[\$(job_color)\]\\$\[${NC}\] "
-}
+```
 
 
 ### Set PROMPT_COMMAND to a function
+```
 export PROMPT_COMMAND=prompt_ps1
-
+```
 
 ==============================================
 
