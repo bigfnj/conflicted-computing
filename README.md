@@ -109,38 +109,38 @@ Now a space, your currently logged in username... the @ symbol and the hostname 
 
 --Now for colors
 In the pwd for current directory on the system
- PWD:
+```PWD:
     Green     == more than 10% free disk space
     Orange    == less than 10% free disk space
     ALERT     == less than 5% free disk space
     Red       == current user does not have write privileges
     Cyan      == current filesystem is size zero (like /proc)
-    
+```    
 For the Smiley we have:
- SMILEY:
+``` SMILEY:
     Green     == last exit code was positive
     Red       == last exit code was negative
-    
+```    
 For username:
- USER:
+``` USER:
     Cyan      == normal user
     Orange    == SU to user
     Red/White == root
-    
+```    
 The @ symbol I decided not to color, as it got a little confusing and no longer worked as a clean break in the prompt seperating the user from the host
 
 For host:
- HOST:
+``` HOST:
     Cyan      == local session
     Green     == secured remote connection (via ssh)
     Red       == unsecured remote connection
-    
+```    
 And finally our prompt ender $:
- $:
+``` $:
     White     == no background or suspended jobs in this shell
     Cyan      == at least one background job in this shell
     Orange    == at least one suspended job in this shell
-
+```
 =========================================
 The next portion of the prompt file is the set of functions that are used to return a color based on the scripted logic. You can assign these colors/functions to any part of the prompt you like, but this seemed to make the most sense to me.
 
