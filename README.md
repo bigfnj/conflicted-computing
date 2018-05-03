@@ -93,4 +93,17 @@ Obviously getting complex can lead to strange, bizarre or inexplicable behavior.
 
 *ssh -t HOSTNAME "bash --noprofile --norc"*
 
-Now, let’s understand the rest of the files in this mess.
+Now, let’s understand the prompt itself.
+Open the prompt file: .bash_ps1_functions
+__
+In order moving down, we see the initial makeup of the prompt itself as:
+# NEWLINE PWD
+# SMILEY USER@HOST $
+
+Newline is simply that, we create a "new line" after the text on the screen to avoid clutter and confusion. We follow that with a pwd command to show our current location in the file system. Here we actually insert another newline so that when we are deep in the file system, it doesnt interupt the prompt, it also keeps the prompt position consistent which is nice.
+
+The prompt start with a smiley (I know right!) it smiles green if your last run action returned a success, if not, its red and frowny!... I'm not going to lie, figuring out how to write this as a function, and later return the result of that function into a command prompt was a fucking nightmare. If your curious the challenge is that the prompt is generated ONCE, when you login. whereas you can write an else statement for the prompt, it doesnt work once you introduce functions into the prompt (such as color coding pieces of it based on what is happening in the system).
+
+Now a space, your currently logged in username... the @ symbol and the hostname of the machine. Finally the prompt ender which is a $ when you are NOT root, and a # when you ARE root.
+
+--Now for colors
