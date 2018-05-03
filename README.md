@@ -81,11 +81,11 @@ The .bash\_profile currently loads the following in this order:
 
     1.  Here at the tail end is what initially started this pet project. The all informative, all-inclusive bash prompt.
 
-       .  Functions
+       .  **Functions**
 
 -   a prompt that relies completely on functions and is enhanced so that different parts of the prompt are color coded depending on what is happening on the system (well get to that later).
 
-       .  Standard
+       .  **Standard**
 
 -   a prompt that relies on nothing; no colorlist, no functions, etc. This prompt is dynamic to the extent that the exit code smiley changes and the color coding changes if you are root or not root. It’s simple, its straight forward, and has worked properly on every system I have put it on.
 
