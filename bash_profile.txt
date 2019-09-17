@@ -33,12 +33,6 @@ fi
 export LANG=$LANG.UTF-8
 
 
-#----------------------
-# Turn on checkwinsize
-#----------------------
-shopt -s checkwinsize
-
-
 #--------------------------
 # ASCII ART PRINT on login
 #--------------------------
@@ -109,6 +103,12 @@ fi
 #if [ -f ~/.ps1/.bash_ps1_standard ]; then
 #    . ~/.ps1/.bash_ps1_standard
 #fi
+
+
+#----------------------
+# Turn on checkwinsize
+#----------------------
+shopt -s checkwinsize
 
 
 #----------------------------------------------------
