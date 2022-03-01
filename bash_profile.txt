@@ -51,6 +51,16 @@ if [[ $? == 0 ]]; then
 fi
 
 
+#------------------------------------------------------------------
+# Alias definitions.
+# You may want to put all your additions into a separate file like
+# ~/.bash_aliases, instead of adding them here directly.
+#------------------------------------------------------------------
+if [ -f ~/.ps1/.bash_aliases ]; then
+    . ~/.ps1/.bash_aliases
+fi
+
+
 #-----------------------------------
 # Many things look better in CoLoR!
 # Lets Call That File
@@ -66,16 +76,6 @@ fi
 #-----------------------------------------------
 if [ "$SUDO_USER" == "user.id" ]; then
         . .user.id_profile
-fi
-
-
-#------------------------------------------------------------------
-# Alias definitions.
-# You may want to put all your additions into a separate file like
-# ~/.bash_aliases, instead of adding them here directly.
-#------------------------------------------------------------------
-if [ -f ~/.ps1/.bash_aliases ]; then
-    . ~/.ps1/.bash_aliases
 fi
 
 
