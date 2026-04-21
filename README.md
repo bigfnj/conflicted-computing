@@ -339,6 +339,237 @@ source ~/.config/bash/_bash_aliases         # Aliases — no dependencies
 ```
 
 
+###
+
+# Bash Utility Scripts — File Breakdown
+
+---
+
+## 1. `colorchart.sh`
+
+### What It Is
+A terminal **ANSI color reference chart**. Run it once and it prints a grid showing every combination of foreground and background color available in a standard 8-color terminal — useful when writing or debugging colored bash output.
+
+### What It Does
+- Defines a short test string `gYw` as the sample text rendered in each color cell
+- Prints a header row labeling the 8 background color codes (`40m`–`47m`)
+- Loops through 17 foreground color codes (default + normal/bold variants of black, red, green, yellow, blue, magenta, cyan, white)
+- For each foreground, renders the test string against all 8 backgrounds using raw `\033[` ANSI escape sequences
+- The result is a color grid you can visually reference when building prompts or colored output
+
+### Dependencies
+- Bash
+- A terminal that supports ANSI escape codes (virtually all modern terminals do)
+- No external tools, no files needed
+
+### How to Run
+```bash
+bash colorchart.sh
+```
+
+---
+
+## 2. `colorchart_full.sh`
+
+### What It Is
+An **extended ANSI color reference chart** — a more comprehensive version of `colorchart.sh` that covers a much wider range of color codes including bright/high-intensity colors and text formatting attributes.
+
+### What It Does
+Uses three nested loops to exhaustively render every combination of:
+
+| Loop | Range | What It Covers |
+|---|---|---|
+| Background (`clbg`) | `40–47`, `100–107`, `49` | Standard + bright backgrounds + default |
+| Foreground (`clfg`) | `30–37`, `90–97`, `39` | Standard + bright foregrounds + default |
+| Formatting (`attr`) | `0 1 2 4 5 7` | Normal, bold, dim, underline, blink, reverse |
+
+Each cell prints the escape code that produced it (e.g. `^[1;42;32m`) so you can immediately see both the visual result and the code needed to reproduce it.
+
+### vs. `colorchart.sh`
+`colorchart.sh` is a quick 8-color reference. `colorchart_full.sh` is the exhaustive reference — it covers bright/256-range colors and all formatting attributes, making it the more useful tool when doing serious terminal UI work.
+
+### Dependencies
+- Bash
+- ANSI-capable terminal
+- No external tools or files needed
+- Licensed under WTFPL v2 (effectively public domain)
+
+### How to Run
+```bash
+bash colorchart_full.sh
+```
+
+---
+
+## 3. `function_linux_release.sh`
+
+### What It Is
+An **OS and Linux distribution detection script**. It identifies the operating system, and if Linux, identifies the specific distribution and version. Useful as a utility function to source into larger scripts that need to behave differently per OS/distro.
+
+### What It Does
+
+**Step 1 — Collect base system info:**
+```
+OS    = uname -s   (e.g. Linux, SunOS, AIX)
+REV   = uname -r   (kernel release)
+MACH  = uname -m   (machine hardware, e.g. x86_64)
+```
+
+**Step 2 — Branch by OS:**
+
+| OS | Detection Method |
+|---|---|
+| **SunOS (Solaris)** | Uses `uname -p` and `uname -v` |
+| **AIX** | Uses `oslevel` and `oslevel -r` |
+| **Linux** | Checks for distro-specific release files (see below) |
+
+**Step 3 — Linux distro detection (checks in order):**
+
+| File Checked | Distro Identified |
+|---|---|
+| `/etc/redhat-release` | Red Hat / CentOS / Fedora |
+| `/etc/SUSE-release` | SUSE Linux |
+| `/etc/mandrake-release` | Mandrake Linux |
+| `/etc/debian_version` | Debian (and derivatives like Ubuntu) |
+| `/etc/UnitedLinux-release` | UnitedLinux (appended if found) |
+
+**Step 4** — Assembles and prints a single `OSSTR` string like:
+```
+Linux RedHat 7.9 (Maipo 5.14.0-284.11.1.el9_2.x86_64 x86_64)
+```
+
+### ⚠️ Age Note
+This script uses **legacy release file detection** that predates `/etc/os-release`, which is now the universal standard across all modern Linux distributions. The distro files it checks (`/etc/redhat-release`, `/etc/SUSE-release`, etc.) still exist on RHEL/CentOS/Fedora as compatibility files, but `/etc/SUSE-release` and `/etc/mandrake-release` are largely gone from modern systems. A modern equivalent would read `/etc/os-release` instead. Still fully functional for its target environments.
+
+### Dependencies
+- `/bin/sh` (POSIX shell — not bash-specific)
+- Standard tools: `uname`, `cat`, `tr`, `sed`
+- Distro-specific: `oslevel` on AIX only
+
+### How to Run
+```bash
+sh function_linux_release.sh
+```
+
+---
+
+## 4. `personal_motd.sh`
+
+### What It Is
+A **custom Message of the Day (MOTD) script** — displays a formatted system info dashboard every time a user logs in. Designed to be dropped into `/etc/profile.d/` so it runs automatically for all users on login.
+
+### What It Does
+
+**Collects system data at login time:**
+
+| Variable | Data Collected |
+|---|---|
+| `SYSname` | Short hostname (`hostname -s`) |
+| `SYSuptime` | System uptime, cleaned up via `sed` |
+| `SYSif` | All IP addresses (`hostname -I`) |
+| `SYSmem` | Total and free RAM in MB (`free -m`) |
+| `SYSaccount` | Current username (`whoami`) |
+| `SYSusers` | All currently logged-in users, deduplicated |
+
+**Root detection:**
+If the current user is root (`id -u` = 0), the username display is rendered as a high-visibility red/white `===> root <===` warning. Normal users display in green.
+
+**Server type detection:**
+Checks for `/etc/openvpn` directory — if found, labels the machine as a `VPN Server`. Additional server types can be added following the same pattern.
+
+**Display output includes:**
+- A large ASCII art hostname banner (via `figlet`)
+- A custom security warning / personal message block
+- A formatted system data table: hostname, IP(s), memory, uptime
+- A live filesystem table showing `%Free`, total, used, and free space for all non-tmpfs, non-proc mounts — rendered via `df -mP` and `awk`
+- A user data section showing current user and all logged-in users
+
+**Commented-out / inactive variables** (ready to re-enable):
+- `SYSrel` — kernel version
+- `SYScpucount` — CPU core count
+- `SYScpu` — CPU model name
+- A maintenance info block that would read from `/etc/motd-maint`
+
+### Dependencies
+
+| Dependency | Required For | Notes |
+|---|---|---|
+| `figlet` | ASCII hostname banner | **Must be installed** — script will error without it |
+| `free` | Memory display | Standard on Linux |
+| `df` | Filesystem table | Standard on Linux |
+| `hostname` | Name and IPs | Standard on Linux |
+| `who` / `whoami` | User info | Standard on Linux |
+| `/etc/profile.d/` | Auto-run on login | Drop the script here; it must be executable |
+
+**To install figlet:**
+```bash
+apt install figlet      # Debian/Ubuntu
+dnf install figlet      # RHEL/Fedora
+```
+
+### Deployment
+```bash
+sudo cp personal_motd.sh /etc/profile.d/motd.sh
+sudo chmod +x /etc/profile.d/motd.sh
+```
+
+---
+
+## 5. `sysload.sh`
+
+### What It Is
+A minimal **three-line system health snapshot** script. Prints current memory usage, disk usage, and CPU load in a clean, readable format. Designed to be fast and dependency-light.
+
+### What It Does
+
+**Line 1 — Memory:**
+```bash
+free -m | awk 'NR==2{printf "Memory Usage: %s/%sMB (%.2f%%)\n", $3,$2,$3*100/$2 }'
+```
+Reads the second row of `free -m` (the `Mem:` line) and prints used vs. total RAM with a percentage.
+
+**Line 2 — Disk:**
+```bash
+df -h | awk '$NF=="/"{printf "Disk Usage: %d/%dGB (%s)\n", $3,$2,$5}'
+```
+Reads `df -h` and filters for the root filesystem (`/`), printing used vs. total disk space and usage percentage.
+
+**Line 3 — CPU Load:**
+```bash
+top -bn1 | grep load | awk '{printf "CPU Load: %.2f\n", $(NF-2)}'
+```
+Runs `top` in batch mode for one iteration, grabs the load average line, and prints the 1-minute load average.
+
+**Example output:**
+```
+Memory Usage: 1873/7974MB (23.49%)
+Disk Usage: 22/98GB (23%)
+CPU Load: 0.21
+```
+
+### Dependencies
+- `/bin/sh` (POSIX shell)
+- `free`, `df`, `top`, `awk` — all standard on any Linux system
+- No external tools or files needed
+
+### How to Run
+```bash
+sh sysload.sh
+```
+Or drop it into a cron job or login script for a quick health check on login.
+
+---
+
+## Summary Table
+
+| Script | Purpose | Shell | Key Dependency | Deploy Location |
+|---|---|---|---|---|
+| `colorchart.sh` | 8-color ANSI reference grid | bash | None | Run on demand |
+| `colorchart_full.sh` | Full ANSI color + formatting reference | bash | None | Run on demand |
+| `function_linux_release.sh` | OS/distro detection utility | sh | None (legacy files) | Source into other scripts |
+| `personal_motd.sh` | Login system info dashboard | bash | `figlet` | `/etc/profile.d/` |
+| `sysload.sh` | Quick memory/disk/CPU snapshot | sh | None | Run on demand / login script |
+
 
 
 ### PROMPT_COMMAND
