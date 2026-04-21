@@ -177,3 +177,107 @@ There are a few samples of other constructed prompts in there but this should ge
 2. Explain other files in the GIT
 3. Document & explain SecureCRT configuration
 4. The prompt doesnt always refresh out properly after say, cat on an executable file, reading up I believe the prompt doesnt know its current position in relation to the terminal window. There are a LOT of different suggestions on correcting this, but I have not found one to be consistent across multiple terminal interfaces (PUTTY, SECURECRT, Etc.)
+
+
+
+### AI Explanation:
+
+# PROMPT_COMMAND
+
+## How it works
+
+`PROMPT_COMMAND` is a bash variable. Whatever string is in it gets **executed as a command before every prompt is drawn**. The project uses it to run a function that rebuilds `PS1` dynamically — so every prompt reflects current system state.
+
+---
+
+## The execution model
+
+```bash
+PROMPT_COMMAND=prompt_ps1
+```
+
+Every time you hit Enter (before the next `$` appears), bash calls `prompt_ps1()`. That function:
+
+1. **Captures `$?` first** — this is critical. `$?` holds the exit code of your last command, but it gets clobbered the moment any other command runs. So it must be the very first thing grabbed.
+2. Calls `disk_color()` — reads `df` for the current PWD filesystem, checks `-w` write permission
+3. Calls `load_color()` — reads `/proc/loadavg`, strips the decimal, compares against thresholds
+4. Calls `job_color()` — runs the `jobs` builtin to count background/suspended processes
+5. Assembles a new `PS1` string with all those color codes baked in
+6. Shell renders the finished `PS1`
+
+---
+
+## What each color function signals
+
+```
+disk_color()  → Green   = writable, normal usage
+              → BRed    = disk > 90% full
+              → ALERT   = disk > 95% full
+              → Red     = no write permission in PWD
+              → Cyan    = zero-size virtual fs (/proc, /sys)
+
+load_color()  → Green   = load < 100 × NCPU
+              → BYellow = load < 200 × NCPU
+              → BRed    = load < 400 × NCPU
+              → ALERT   = load >= 400 × NCPU
+
+job_color()   → BCyan   = background jobs running
+              → BRed    = suspended jobs exist
+```
+
+Load thresholds scale with CPU count: `NCPU=$(grep -c 'processor' /proc/cpuinfo)` — so a 4-core machine has `SLOAD=400`, `MLOAD=800`, `XLOAD=1600`.
+
+---
+
+## The exit smiley
+
+The exit code smiley lives directly in the `PS1` string as an inline conditional:
+
+```bash
+$(if [[ $? == 0 ]]; then echo "\[\e[1;92m\]:)"; else echo "\[\e[1;31m\]:("; fi)
+```
+
+Green `:)` on success, red `:(` on failure. In the function-based prompt, `$?` is captured at the top of `prompt_ps1` so it's available throughout.
+
+---
+
+## Prompt format (assembled output)
+
+```
+Line 1: [disk_color] /current/working/dir [reset]
+Line 2: [:) or :(]  [user@host in connection+user color]  [$ in job_color]
+```
+
+The two-line format keeps the actual command input area clean regardless of how long the path is.
+
+---
+
+## The two implementations
+
+**`.bash_ps1_functions`** — full dynamic version:
+- `PROMPT_COMMAND=prompt_ps1` calls the function every prompt
+- All three color functions fire on every keypress of Enter
+- Disk check hits `df` every prompt (minor I/O cost)
+
+**`.bash_ps1_standard`** — static fallback:
+- No `PROMPT_COMMAND` — uses inline `$()` in PS1 directly
+- Only the exit smiley is dynamic (evaluated at render time)
+- No disk/load/job colors — works on any system with no dependencies
+
+---
+
+## The `SUDO_PS1` export
+
+Both prompt files do:
+```bash
+export SUDO_PS1=$PS1
+```
+This passes the configured prompt into sudo sessions so the visual context (user color, root indicator) carries through when you `sudo su` or `sudo -i`.
+
+---
+
+## From the examples
+
+`examples/function_examples.sh` shows a more elaborate `PROMPT_COMMAND` pattern where the function is named `__prompt_command` and also prepends the numeric exit code to the prompt when it's non-zero — so you see `[127] :(` instead of just `:(`. That pattern isn't in the deployed files, just documented as a reference.
+
+`examples/subash_prompt_example.sh` extends `PROMPT_COMMAND` further to also run `git fetch --quiet &` in the background if `FETCH_HEAD` is more than 60 minutes old — so git status is always fresh without blocking the prompt.
