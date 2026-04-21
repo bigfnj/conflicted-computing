@@ -179,10 +179,169 @@ There are a few samples of other constructed prompts in there but this should ge
 4. The prompt doesnt always refresh out properly after say, cat on an executable file, reading up I believe the prompt doesnt know its current position in relation to the terminal window. There are a LOT of different suggestions on correcting this, but I have not found one to be consistent across multiple terminal interfaces (PUTTY, SECURECRT, Etc.)
 
 
+### Alias's Breakdown:
 
-### AI Explanation:
+# `_bash_aliases` — File Breakdown
 
-# PROMPT_COMMAND
+## What It Is
+
+A **bash aliases file** — a collection of shorthand command definitions meant to be sourced from `.bashrc` or `.bash_profile`. Every `alias` here either replaces a default command with a better-behaved version, or creates a new short command that saves typing.
+
+---
+
+## What Each Section Does
+
+### Colorize
+
+- `grep` always runs with line numbers (`-n`) and color highlighting — makes search results immediately scannable.
+
+---
+
+### Generic QoL
+
+| Alias | Command | Purpose |
+|---|---|---|
+| `c` | `clear` | Clears the screen in one keystroke |
+| `..` | `cd ..` | Go up one directory level |
+| `sudo` | `sudo ` | Trailing space tells bash to also alias-expand the next word, so `sudo ll` works |
+| `wget` | `wget -c` | Always resumes interrupted downloads instead of starting over |
+| `tf` | `tail -250f` | Follow log files with a 250-line buffer |
+| `mkdir` | `mkdir -pv` | Always creates parent directories silently, so `mkdir a/b/c` just works |
+| `du` | `du -ach \| sort -h` | Human-readable disk usage, sorted by size |
+
+---
+
+### The `ls` Family
+
+All color-aware. Built around a consistent long-list base (`ll`).
+
+| Alias | Behavior |
+|---|---|
+| `ls` | Default listing with color |
+| `lx` | Sort by file extension |
+| `lk` | Sort by size, biggest last |
+| `lt` | Sort by date, newest last |
+| `lc` | Sort by change time |
+| `lu` | Sort by access time |
+| `ll` | Long list, directories first, alphanumeric sort |
+| `lm` | `ll` piped through `more` |
+| `la` | Show hidden files, newest last |
+| `l.` | Hidden files only, no directories |
+| `lah` | Hidden files in long format |
+| `lr` | Recursive long list |
+
+---
+
+### Added / Extended Commands
+
+| Alias | Command | Purpose |
+|---|---|---|
+| `ports` | `netstat -tulanp` | All listening/connected TCP+UDP ports |
+| `meminfo` | `free -m -l -t` | Memory summary broken out by type |
+| `mount` | `mount \| column -t` | Mount output formatted into aligned columns |
+| `now` | `date +"%T \| %m-%d-%Y"` | Current time and date: `HH:MM:SS \| MM-DD-YYYY` |
+| `psg` | `ps aux \| grep ...` | Filter processes by name — pass argument e.g. `psg nginx` |
+
+---
+
+### Process Memory Monitoring
+
+| Alias | Behavior |
+|---|---|
+| `psmem` | All processes sorted by memory consumption, highest first |
+| `psmem10` | Same, capped to top 10 |
+
+---
+
+### PATH Pretty-Print
+
+| Alias | Behavior |
+|---|---|
+| `path` | Prints each `$PATH` entry on its own line |
+| `libpath` | Same for `$LD_LIBRARY_PATH` |
+
+---
+
+### iptables (Sudo Section)
+
+These all require sudo privileges and `/sbin/iptables` to exist.
+
+| Alias | Behavior |
+|---|---|
+| `ipt` | Shorthand for `sudo /sbin/iptables` |
+| `iptlist` | Verbose numbered listing of all chains |
+| `iptlistin` | INPUT chain only |
+| `iptlistfw` | FORWARD chain only |
+| `iptlistout` | OUTPUT chain only |
+| `firewall` | Alias for `iptlist` |
+
+---
+
+## Dependencies / What Needs to Be in Place
+
+This file has **no hard external dependencies** — it will source cleanly on any standard Linux system. A few exceptions:
+
+### Commented-Out Aliases (require manual setup before enabling)
+
+1. `#alias vi='vim'`
+   Needs `vim-enhanced` installed:
+   ```bash
+   # Debian/Ubuntu
+   apt install vim
+   # RHEL/Fedora
+   dnf install vim-enhanced
+   ```
+
+2. `#alias cat='ccat'`
+   Needs the [`ccat`](https://github.com/jingweno/ccat) binary at `/usr/bin/ccat` with execute permissions:
+   ```bash
+   chmod +x /usr/bin/ccat
+   ```
+   `ccat` is a syntax-highlighted drop-in replacement for `cat`.
+
+### `netstat` (used by `ports`)
+
+`netstat` is in the `net-tools` package, which isn't always installed by default on newer distros. If `ports` fails, install it or use the modern equivalent:
+
+```bash
+# Install net-tools
+apt install net-tools        # Debian/Ubuntu
+dnf install net-tools        # RHEL/Fedora
+
+# Or use the modern equivalent directly
+ss -tulanp
+```
+
+### iptables vs nftables
+
+Most modern distros default to `nftables` rather than `iptables`. If the `ipt*` aliases fail, your system may need:
+```bash
+apt install iptables     # Debian/Ubuntu
+dnf install iptables     # RHEL/Fedora
+```
+
+---
+
+## How to Load It
+
+Source from `.bashrc` or `.bash_profile`:
+
+```bash
+source ~/.config/bash/_bash_aliases
+```
+
+If used alongside companion bash config files, the recommended source order is:
+
+```bash
+source ~/.config/bash/_bash_colors          # Color variables — MUST be first
+source ~/.config/bash/_bash_ps1_functions   # Prompt — depends on color vars
+source ~/.config/bash/_bash_aliases         # Aliases — no dependencies
+```
+
+
+
+
+### PROMPT_COMMAND
 
 ## How it works
 
